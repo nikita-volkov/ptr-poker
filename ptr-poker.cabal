@@ -24,8 +24,10 @@ library
     PtrPoker
   other-modules:
     PtrPoker.IO.ByteString
+    PtrPoker.IO.Prim
     PtrPoker.Prelude
+    PtrPoker.UncheckedShifting
   build-depends:
-    base >=4.9 && <5,
+    base >=4.11 && <5,
     bytestring >=0.10 && <0.12,
     text >=1 && <2
