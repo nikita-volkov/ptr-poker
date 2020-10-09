@@ -23,10 +23,13 @@ library
   exposed-modules:
     PtrPoker
   other-modules:
+    PtrPoker.IO.Ascii
     PtrPoker.IO.ByteString
     PtrPoker.IO.Prim
     PtrPoker.Prelude
     PtrPoker.UncheckedShifting
+  c-sources:
+    cbits/itoa.c
   build-depends:
     base >=4.11 && <5,
     bytestring >=0.10 && <0.12,

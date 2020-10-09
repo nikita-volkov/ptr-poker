@@ -4,6 +4,7 @@ where
 import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
+import qualified PtrPoker.IO.Ascii as AsciiIO
 
 
 newtype Poker =
@@ -48,3 +49,57 @@ lWord64 a =
 bWord64 :: Word64 -> Poker
 bWord64 a =
   Poker (\ p -> PrimIO.pokeBEWord64 p a $> plusPtr p 8)
+
+
+-- * ASCII integers
+-------------------------
+
+{-# INLINE asciiDecInt8 #-}
+asciiDecInt8 :: Int8 -> Poker
+asciiDecInt8 a =
+  Poker (AsciiIO.pokeIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecInt16 #-}
+asciiDecInt16 :: Int16 -> Poker
+asciiDecInt16 a =
+  Poker (AsciiIO.pokeIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecInt32 #-}
+asciiDecInt32 :: Int32 -> Poker
+asciiDecInt32 a =
+  Poker (AsciiIO.pokeIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecInt64 #-}
+asciiDecInt64 :: Int64 -> Poker
+asciiDecInt64 a =
+  Poker (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecInt #-}
+asciiDecInt :: Int -> Poker
+asciiDecInt a =
+  Poker (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecWord8 #-}
+asciiDecWord8 :: Word8 -> Poker
+asciiDecWord8 a =
+  Poker (AsciiIO.pokeUIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecWord16 #-}
+asciiDecWord16 :: Word16 -> Poker
+asciiDecWord16 a =
+  Poker (AsciiIO.pokeUIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecWord32 #-}
+asciiDecWord32 :: Word32 -> Poker
+asciiDecWord32 a =
+  Poker (AsciiIO.pokeUIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecWord64 #-}
+asciiDecWord64 :: Word64 -> Poker
+asciiDecWord64 a =
+  Poker (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
+
+{-# INLINE asciiDecWord #-}
+asciiDecWord :: Word -> Poker
+asciiDecWord a =
+  Poker (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
