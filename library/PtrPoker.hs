@@ -29,6 +29,9 @@ instance Monoid Poker where
   mconcat =
     concat
 
+instance IsString Poker where
+  fromString = byteString . fromString
+
 {-# INLINE[1] concat #-}
 concat :: Foldable f => f Poker -> Poker
 concat pokers =
