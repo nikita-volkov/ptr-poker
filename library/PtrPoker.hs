@@ -23,7 +23,7 @@ instance Semigroup Poker where
     concat
 
 instance Monoid Poker where
-  {-# INLINE [1] mempty #-}
+  {-# INLINE[1] mempty #-}
   mempty =
     Poker return
   mconcat =
