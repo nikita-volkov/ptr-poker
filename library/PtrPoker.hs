@@ -16,19 +16,20 @@ newtype Poker =
   Poker { run :: Ptr Word8 -> IO (Ptr Word8) }
 
 instance Semigroup Poker where
-  {-# INLINE (<>) #-}
+  {-# INLINE[1] (<>) #-}
   Poker lIO <> Poker rIO =
     Poker (lIO >=> rIO)
   sconcat =
     concat
 
 instance Monoid Poker where
+  {-# INLINE [1] mempty #-}
   mempty =
     Poker return
   mconcat =
     concat
 
-{-# INLINE concat #-}
+{-# INLINE[1] concat #-}
 concat :: Foldable f => f Poker -> Poker
 concat pokers =
   Poker (\ p -> foldM (\ p (Poker io) -> io p) p pokers)
