@@ -7,6 +7,11 @@ import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.IO.Ascii as AsciiIO
 
 
+{-# RULES
+  "foldMap" forall f foldable. foldMap f foldable =
+    Poker $ \ p -> foldM (\ p (Poker poker) -> poker p) p foldable
+  #-}
+
 newtype Poker =
   Poker { run :: Ptr Word8 -> IO (Ptr Word8) }
 
