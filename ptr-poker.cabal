@@ -29,6 +29,7 @@ library
     PtrPoker.Prelude
     PtrPoker.UncheckedShifting
   c-sources:
+    cbits/dtoa.c
     cbits/itoa.c
   build-depends:
     base >=4.11 && <5,

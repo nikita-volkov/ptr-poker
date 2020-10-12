@@ -109,3 +109,10 @@ asciiDecWord64 a =
 asciiDecWord :: Word -> Poker
 asciiDecWord a =
   Poker (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
+
+{-# INLINE asciiDouble #-}
+asciiDouble :: Double -> Poker
+asciiDouble a =
+  Poker $ \ ptr ->
+    AsciiIO.pokeDouble a ptr
+      & fmap (plusPtr ptr . fromIntegral)
