@@ -119,3 +119,20 @@ doubleAsciiDec a =
   Poke $ \ ptr ->
     AsciiIO.pokeDouble a ptr
       & fmap (plusPtr ptr . fromIntegral)
+
+
+-- * Low level
+-------------------------
+
+{-|
+Having the amount of bytes to be written precomputed,
+executes an action, which fills the pointer going downward.
+-}
+{-# INLINE sizedReverse #-}
+sizedReverse :: Int -> (Ptr Word8 -> IO a) -> Poke
+sizedReverse size action =
+  Poke $ \ ptr ->
+    let
+      afterPtr =
+        plusPtr ptr size
+      in action afterPtr $> afterPtr
