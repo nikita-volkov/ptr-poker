@@ -21,10 +21,11 @@ library
   default-extensions: BangPatterns, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, DerivingVia, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, InstanceSigs, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, StrictData, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, UnboxedTuples
   default-language: Haskell2010
   exposed-modules:
-    PtrPoker.Write
     PtrPoker.Poke
+    PtrPoker.Write
   other-modules:
-    PtrPoker.Ffi.IntEncoding
+    PtrPoker.ByteString
+    PtrPoker.Ffi
     PtrPoker.IO.Ascii
     PtrPoker.IO.ByteString
     PtrPoker.IO.Prim
@@ -38,4 +39,5 @@ library
   build-depends:
     base >=4.11 && <5,
     bytestring >=0.10 && <0.12,
+    scientific >=0.3.6.2 && <0.4,
     text >=1 && <2

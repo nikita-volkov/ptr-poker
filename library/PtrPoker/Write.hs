@@ -7,7 +7,10 @@ import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.IO.Ascii as AsciiIO
 import qualified PtrPoker.Poke as Poke
 import qualified PtrPoker.Size as Size
-import qualified PtrPoker.Ffi.IntEncoding as IntEncodingFfi
+import qualified PtrPoker.Ffi as Ffi
+import qualified PtrPoker.ByteString as ByteString
+import qualified Data.ByteString as ByteString
+import qualified Data.ByteString.Internal as ByteString
 
 
 {-|
@@ -44,4 +47,14 @@ int64AsciiDec a =
     size =
       Size.int64Dec a
     poke =
-      Poke.sizedReverse size (IntEncodingFfi.revPokeInt64InReverse (fromIntegral a))
+      Poke.sizedReverse size (Ffi.revPokeInt64InReverse (fromIntegral a))
+
+{-# INLINE byteString #-}
+byteString :: ByteString -> Write
+byteString a =
+  Write (ByteString.length a) (Poke.byteString a)
+
+{-# INLINE scientific #-}
+scientific :: Scientific -> Write
+scientific =
+  byteString . ByteString.scientific

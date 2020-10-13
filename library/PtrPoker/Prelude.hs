@@ -86,6 +86,9 @@ import Data.Text as Exports (Text)
 -------------------------
 import Data.ByteString as Exports (ByteString)
 
+-- scientific
+-------------------------
+import Data.Scientific as Exports (Scientific)
 
 showAsText :: Show a => a -> Text
 showAsText = show >>> fromString
