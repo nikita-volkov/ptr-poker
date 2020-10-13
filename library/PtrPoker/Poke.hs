@@ -63,59 +63,59 @@ bWord64 a =
 -- * ASCII integers
 -------------------------
 
-{-# INLINE[1] asciiDecInt8 #-}
-asciiDecInt8 :: Int8 -> Poke
-asciiDecInt8 a =
+{-# INLINE[1] int8AsciiDec #-}
+int8AsciiDec :: Int8 -> Poke
+int8AsciiDec a =
   Poke (AsciiIO.pokeIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecInt16 #-}
-asciiDecInt16 :: Int16 -> Poke
-asciiDecInt16 a =
+{-# INLINE[1] int16AsciiDec #-}
+int16AsciiDec :: Int16 -> Poke
+int16AsciiDec a =
   Poke (AsciiIO.pokeIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecInt32 #-}
-asciiDecInt32 :: Int32 -> Poke
-asciiDecInt32 a =
+{-# INLINE[1] int32AsciiDec #-}
+int32AsciiDec :: Int32 -> Poke
+int32AsciiDec a =
   Poke (AsciiIO.pokeIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecInt64 #-}
-asciiDecInt64 :: Int64 -> Poke
-asciiDecInt64 a =
+{-# INLINE[1] int64AsciiDec #-}
+int64AsciiDec :: Int64 -> Poke
+int64AsciiDec a =
   Poke (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecInt #-}
-asciiDecInt :: Int -> Poke
-asciiDecInt a =
+{-# INLINE[1] intAsciiDec #-}
+intAsciiDec :: Int -> Poke
+intAsciiDec a =
   Poke (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecWord8 #-}
-asciiDecWord8 :: Word8 -> Poke
-asciiDecWord8 a =
+{-# INLINE[1] word8AsciiDec #-}
+word8AsciiDec :: Word8 -> Poke
+word8AsciiDec a =
   Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecWord16 #-}
-asciiDecWord16 :: Word16 -> Poke
-asciiDecWord16 a =
+{-# INLINE[1] word16AsciiDec #-}
+word16AsciiDec :: Word16 -> Poke
+word16AsciiDec a =
   Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecWord32 #-}
-asciiDecWord32 :: Word32 -> Poke
-asciiDecWord32 a =
+{-# INLINE[1] word32AsciiDec #-}
+word32AsciiDec :: Word32 -> Poke
+word32AsciiDec a =
   Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecWord64 #-}
-asciiDecWord64 :: Word64 -> Poke
-asciiDecWord64 a =
+{-# INLINE[1] word64AsciiDec #-}
+word64AsciiDec :: Word64 -> Poke
+word64AsciiDec a =
   Poke (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
 
-{-# INLINE[1] asciiDecWord #-}
-asciiDecWord :: Word -> Poke
-asciiDecWord a =
+{-# INLINE[1] wordAsciiDec #-}
+wordAsciiDec :: Word -> Poke
+wordAsciiDec a =
   Poke (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
 
-{-# INLINE asciiDouble #-}
-asciiDouble :: Double -> Poke
-asciiDouble a =
+{-# INLINE doubleAsciiDec #-}
+doubleAsciiDec :: Double -> Poke
+doubleAsciiDec a =
   Poke $ \ ptr ->
     AsciiIO.pokeDouble a ptr
       & fmap (plusPtr ptr . fromIntegral)
