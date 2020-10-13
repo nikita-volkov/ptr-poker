@@ -1,4 +1,4 @@
-module PtrPoker.Alloc
+module PtrPoker.Write
 where
 
 import PtrPoker.Prelude
@@ -15,31 +15,31 @@ Specification of how much bytes to allocate and how to populate them.
 
 Useful for creating strict bytestrings and tasks like that.
 -}
-data Alloc =
-  Alloc {
-    allocSize :: Int,
-    allocPoke :: Poke.Poke
+data Write =
+  Write {
+    writeSize :: Int,
+    writePoke :: Poke.Poke
     }
 
-instance Semigroup Alloc where
+instance Semigroup Write where
   {-# INLINE (<>) #-}
-  Alloc lSize lPoke <> Alloc rSize rPoke =
-    Alloc (lSize + rSize) (lPoke <> rPoke)
+  Write lSize lPoke <> Write rSize rPoke =
+    Write (lSize + rSize) (lPoke <> rPoke)
 
-instance Monoid Alloc where
+instance Monoid Write where
   {-# INLINE mempty #-}
   mempty =
-    Alloc 0 mempty
+    Write 0 mempty
 
 {-# INLINE intAsciiDec #-}
-intAsciiDec :: Int -> Alloc
+intAsciiDec :: Int -> Write
 intAsciiDec =
   int64AsciiDec . fromIntegral
 
 {-# INLINE int64AsciiDec #-}
-int64AsciiDec :: Int64 -> Alloc
+int64AsciiDec :: Int64 -> Write
 int64AsciiDec a =
-  Alloc size poke
+  Write size poke
   where
     size =
       Size.int64Dec a
