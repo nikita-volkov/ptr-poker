@@ -13,6 +13,10 @@ import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Internal as ByteString
 
 
+writeByteString :: Write -> ByteString
+writeByteString Write{..} =
+  ByteString.unsafeCreate writeSize (void . Poke.run writePoke)
+
 {-|
 Specification of how much bytes to allocate and how to populate them.
 
@@ -49,12 +53,17 @@ int64AsciiDec a =
     poke =
       Poke.sizedReverse size (Ffi.revPokeInt64InReverse (fromIntegral a))
 
+{-# INLINE doubleAsciiDec #-}
+doubleAsciiDec :: Double -> Write
+doubleAsciiDec =
+  byteString . ByteString.double
+
+{-# INLINE scientificAsciiDec #-}
+scientificAsciiDec :: Scientific -> Write
+scientificAsciiDec =
+  byteString . ByteString.scientific
+
 {-# INLINE byteString #-}
 byteString :: ByteString -> Write
 byteString a =
   Write (ByteString.length a) (Poke.byteString a)
-
-{-# INLINE scientific #-}
-scientific :: Scientific -> Write
-scientific =
-  byteString . ByteString.scientific
