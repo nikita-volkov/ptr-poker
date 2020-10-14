@@ -51,7 +51,7 @@ int64AsciiDec a =
     size =
       Size.int64Dec a
     poke =
-      Poke.sizedReverse size (Ffi.revPokeInt64InReverse (fromIntegral a))
+      Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
 
 {-# INLINE doubleAsciiDec #-}
 doubleAsciiDec :: Double -> Write

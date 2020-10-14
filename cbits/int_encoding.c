@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-void rev_poke_int64_in_reverse
+void rev_poke_int64
 (
   int64_t val,
   uint8_t* dst
