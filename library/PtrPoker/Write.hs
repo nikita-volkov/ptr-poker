@@ -38,6 +38,16 @@ instance Monoid Write where
   mempty =
     Write 0 mempty
 
+instance IsString Write where
+  {-# INLINE fromString #-}
+  fromString =
+    byteString . fromString
+
+{-# INLINE word8 #-}
+word8 :: Word8 -> Write
+word8 a =
+  Write 1 (Poke.word8 a)
+
 {-# INLINE intAsciiDec #-}
 intAsciiDec :: Int -> Write
 intAsciiDec =
@@ -53,10 +63,19 @@ int64AsciiDec a =
     poke =
       Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
 
-{-# INLINE doubleAsciiDec #-}
-doubleAsciiDec :: Double -> Write
-doubleAsciiDec =
-  byteString . ByteString.double
+{-|
+Render double interpreting non real values,
+such as @NaN@, @Infinity@, @-Infinity@,
+as zero.
+-}
+{-# INLINE zeroNonRealDoubleAsciiDec #-}
+zeroNonRealDoubleAsciiDec :: Double -> Write
+zeroNonRealDoubleAsciiDec a =
+  if isNaN a || isInfinite a || isNegativeZero a
+    then word8 48
+    else if a < 0
+      then word8 45 <> byteString (ByteString.double (negate a))
+      else byteString (ByteString.double a)
 
 {-# INLINE scientificAsciiDec #-}
 scientificAsciiDec :: Scientific -> Write
