@@ -7,9 +7,9 @@ where
 import PtrPoker.Prelude
 
 
-{-# INLINE word64Dec #-}
-word64Dec :: Word64 -> Int
-word64Dec x =
+{-# INLINE word64AsciiDec #-}
+word64AsciiDec :: Word64 -> Int
+word64AsciiDec x =
   if x > 9999999999
     then if x > 99999999999999
       then if x > 9999999999999999
@@ -50,9 +50,9 @@ word64Dec x =
           then 2
           else 1
 
-{-# INLINE int64Dec #-}
-int64Dec :: Int64 -> Int
-int64Dec x =
+{-# INLINE int64AsciiDec #-}
+int64AsciiDec :: Int64 -> Int
+int64AsciiDec x =
   if x < 0
     then if x < -9999999999
       then if x < -99999999999999

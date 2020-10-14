@@ -7,11 +7,26 @@ import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import qualified Data.ByteString.Char8 as Char8ByteString
 import qualified PtrPoker.Write as Write
+import qualified PtrPoker.Size as Size
 import qualified Numeric.Limits as NumericLimits
 
 
 main =
   defaultMain $ pure $ checkParallel $ $$(discover)
+
+prop_word64Size =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.word64 (Range.exponential minBound maxBound))
+    Size.word64AsciiDec a
+      === length (show a)
+
+prop_int64Size =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.int64 (Range.exponential minBound maxBound))
+    Size.int64AsciiDec a
+      === length (show a)
 
 prop_wordAsciiDec =
   withTests 999 $

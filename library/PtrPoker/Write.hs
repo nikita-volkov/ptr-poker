@@ -53,7 +53,7 @@ word64AsciiDec a =
   Write size poke
   where
     size =
-      Size.word64Dec a
+      Size.word64AsciiDec a
     poke =
       Poke.sizedReverse size (Ffi.revPokeUInt64 (fromIntegral a))
 
@@ -68,7 +68,7 @@ int64AsciiDec a =
   Write size poke
   where
     size =
-      Size.int64Dec a
+      Size.int64AsciiDec a
     poke =
       Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
 

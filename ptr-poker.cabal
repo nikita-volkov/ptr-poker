@@ -23,6 +23,7 @@ library
   exposed-modules:
     PtrPoker.Poke
     PtrPoker.Write
+    PtrPoker.Size
   other-modules:
     PtrPoker.ByteString
     PtrPoker.Ffi
@@ -30,7 +31,6 @@ library
     PtrPoker.IO.Prim
     PtrPoker.Prelude
     PtrPoker.UncheckedShifting
-    PtrPoker.Size
   c-sources:
     cbits/dtoa.c
     cbits/int_encoding.c
