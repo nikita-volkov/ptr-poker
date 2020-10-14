@@ -13,9 +13,9 @@ import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Internal as ByteString
 
 
-writeByteString :: Write -> ByteString
-writeByteString Write{..} =
-  ByteString.unsafeCreate writeSize (void . Poke.run writePoke)
+writeToByteString :: Write -> ByteString
+writeToByteString Write{..} =
+  ByteString.unsafeCreate writeSize (void . Poke.pokePtr writePoke)
 
 {-|
 Specification of how much bytes to allocate and how to populate them.

@@ -13,7 +13,7 @@ import qualified PtrPoker.IO.Ascii as AsciiIO
   #-}
 
 newtype Poke =
-  Poke { run :: Ptr Word8 -> IO (Ptr Word8) }
+  Poke { pokePtr :: Ptr Word8 -> IO (Ptr Word8) }
 
 instance Semigroup Poke where
   {-# INLINE[1] (<>) #-}
