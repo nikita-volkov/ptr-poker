@@ -33,16 +33,6 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
     annotate string
     read string === 0
 
-prop_realZeroNonRealDoubleAsciiDecEqualsShow =
-  withTests 999 $
-  property $ do
-    a <- forAll realRealFloatGen
-    let
-      string =
-        Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
-    annotate string
-    string === show a
-
 
 -- * Gens
 -------------------------
