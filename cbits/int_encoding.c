@@ -17,9 +17,22 @@ void rev_poke_int64
 {
   bool negate = false;
 
-  if (val < 0) {
-    val = -val;
-    negate = true;
+  if (val < 0)
+  {
+    int64_t b4 = val;
+    val /= 10;
+    if (val)
+    {
+      *--dst = val * 10 - b4 + 48;
+      val = -val;
+      negate = true;
+    }
+    else
+    {
+      *(dst - 1) = val * 10 - b4 + 48;
+      *(dst - 2) = '-';
+      return;
+    }
   }
 
   do
@@ -28,35 +41,10 @@ void rev_poke_int64
     val /= 10;
     *--dst = b4 - val * 10 + 48;
   }
-  while(val);
+  while (val);
 
-  if (negate) {
-    *--dst = '-';
-  }
-}
-
-void rev_poke_int
-(
-  int val,
-  char* dst
-)
-{
-  bool negate = false;
-
-  if (val < 0) {
-    val = -val;
-    negate = true;
-  }
-
-  do
+  if (negate)
   {
-    int b4 = val;
-    val /= 10;
-    *--dst = b4 - val * 10 + 48;
-  }
-  while(val);
-
-  if (negate) {
     *--dst = '-';
   }
 }

@@ -13,6 +13,16 @@ import qualified Numeric.Limits as NumericLimits
 main =
   defaultMain $ pure $ checkParallel $ $$(discover)
 
+prop_intAsciiDec =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.int (Range.exponential minBound maxBound))
+    let
+      string =
+        Char8ByteString.unpack (Write.writeToByteString (Write.intAsciiDec a))
+    annotate string
+    read string === a
+
 prop_doubleAsciiDec =
   withTests 999 $
   property $ do
