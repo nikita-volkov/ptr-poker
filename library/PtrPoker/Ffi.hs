@@ -26,5 +26,8 @@ foreign import ccall unsafe "static long_long_uint_hex"
 foreign import ccall unsafe "static rev_poke_int64"
   revPokeInt64 :: CLLong -> Ptr Word8 -> IO ()
 
+foreign import ccall unsafe "static rev_poke_uint64"
+  revPokeUInt64 :: CULLong -> Ptr Word8 -> IO ()
+
 foreign import ccall unsafe "static dtoa_grisu3"
   pokeDouble :: Double -> Ptr Word8 -> IO CInt

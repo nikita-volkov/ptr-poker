@@ -48,3 +48,18 @@ void rev_poke_int64
     *--dst = '-';
   }
 }
+
+void rev_poke_uint64
+(
+  uint64_t val,
+  uint8_t* dst
+)
+{
+  do
+  {
+    uint64_t b4 = val;
+    val /= 10;
+    *--dst = b4 - val * 10 + 48;
+  }
+  while (val);
+}

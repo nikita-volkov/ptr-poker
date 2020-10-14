@@ -47,10 +47,20 @@ word8 :: Word8 -> Write
 word8 a =
   Write 1 (Poke.word8 a)
 
-{-# INLINE intAsciiDec #-}
-intAsciiDec :: Int -> Write
-intAsciiDec =
-  int64AsciiDec . fromIntegral
+{-# INLINE word64AsciiDec #-}
+word64AsciiDec :: Word64 -> Write
+word64AsciiDec a =
+  Write size poke
+  where
+    size =
+      Size.word64Dec a
+    poke =
+      Poke.sizedReverse size (Ffi.revPokeUInt64 (fromIntegral a))
+
+{-# INLINE wordAsciiDec #-}
+wordAsciiDec :: Word -> Write
+wordAsciiDec =
+  word64AsciiDec . fromIntegral
 
 {-# INLINE int64AsciiDec #-}
 int64AsciiDec :: Int64 -> Write
@@ -61,6 +71,11 @@ int64AsciiDec a =
       Size.int64Dec a
     poke =
       Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
+
+{-# INLINE intAsciiDec #-}
+intAsciiDec :: Int -> Write
+intAsciiDec =
+  int64AsciiDec . fromIntegral
 
 {-|
 Render double interpreting non-real values,
