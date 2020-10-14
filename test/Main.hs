@@ -36,7 +36,7 @@ prop_realZeroNonRealDoubleAsciiDec =
     read string === a
 
 prop_nonRealZeroNonRealDoubleAsciiDec =
-  withTests 999 $
+  withTests 99 $
   property $ do
     a <- forAll nonRealRealFloatGen
     let
