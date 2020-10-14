@@ -4,7 +4,6 @@ where
 import PtrPoker.Prelude
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
-import qualified PtrPoker.IO.Ascii as AsciiIO
 import qualified PtrPoker.Poke as Poke
 import qualified PtrPoker.Size as Size
 import qualified PtrPoker.Ffi as Ffi

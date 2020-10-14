@@ -4,7 +4,7 @@ where
 import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
-import qualified PtrPoker.IO.Ascii as AsciiIO
+import qualified PtrPoker.Ffi as Ffi
 
 
 {-# RULES
@@ -66,58 +66,58 @@ bWord64 a =
 {-# INLINE[1] int8AsciiDec #-}
 int8AsciiDec :: Int8 -> Poke
 int8AsciiDec a =
-  Poke (AsciiIO.pokeIntInDec (fromIntegral a))
+  Poke (Ffi.pokeIntInDec (fromIntegral a))
 
 {-# INLINE[1] int16AsciiDec #-}
 int16AsciiDec :: Int16 -> Poke
 int16AsciiDec a =
-  Poke (AsciiIO.pokeIntInDec (fromIntegral a))
+  Poke (Ffi.pokeIntInDec (fromIntegral a))
 
 {-# INLINE[1] int32AsciiDec #-}
 int32AsciiDec :: Int32 -> Poke
 int32AsciiDec a =
-  Poke (AsciiIO.pokeIntInDec (fromIntegral a))
+  Poke (Ffi.pokeIntInDec (fromIntegral a))
 
 {-# INLINE[1] int64AsciiDec #-}
 int64AsciiDec :: Int64 -> Poke
 int64AsciiDec a =
-  Poke (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
+  Poke (Ffi.pokeLongLongIntInDec (fromIntegral a))
 
 {-# INLINE[1] intAsciiDec #-}
 intAsciiDec :: Int -> Poke
 intAsciiDec a =
-  Poke (AsciiIO.pokeLongLongIntInDec (fromIntegral a))
+  Poke (Ffi.pokeLongLongIntInDec (fromIntegral a))
 
 {-# INLINE[1] word8AsciiDec #-}
 word8AsciiDec :: Word8 -> Poke
 word8AsciiDec a =
-  Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
+  Poke (Ffi.pokeUIntInDec (fromIntegral a))
 
 {-# INLINE[1] word16AsciiDec #-}
 word16AsciiDec :: Word16 -> Poke
 word16AsciiDec a =
-  Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
+  Poke (Ffi.pokeUIntInDec (fromIntegral a))
 
 {-# INLINE[1] word32AsciiDec #-}
 word32AsciiDec :: Word32 -> Poke
 word32AsciiDec a =
-  Poke (AsciiIO.pokeUIntInDec (fromIntegral a))
+  Poke (Ffi.pokeUIntInDec (fromIntegral a))
 
 {-# INLINE[1] word64AsciiDec #-}
 word64AsciiDec :: Word64 -> Poke
 word64AsciiDec a =
-  Poke (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
+  Poke (Ffi.pokeLongLongUIntInDec (fromIntegral a))
 
 {-# INLINE[1] wordAsciiDec #-}
 wordAsciiDec :: Word -> Poke
 wordAsciiDec a =
-  Poke (AsciiIO.pokeLongLongUIntInDec (fromIntegral a))
+  Poke (Ffi.pokeLongLongUIntInDec (fromIntegral a))
 
 {-# INLINE doubleAsciiDec #-}
 doubleAsciiDec :: Double -> Poke
 doubleAsciiDec a =
   Poke $ \ ptr ->
-    AsciiIO.pokeDouble a ptr
+    Ffi.pokeDouble a ptr
       & fmap (plusPtr ptr . fromIntegral)
 
 

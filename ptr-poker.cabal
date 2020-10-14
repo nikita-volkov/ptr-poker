@@ -26,7 +26,6 @@ library
   other-modules:
     PtrPoker.ByteString
     PtrPoker.Ffi
-    PtrPoker.IO.Ascii
     PtrPoker.IO.ByteString
     PtrPoker.IO.Prim
     PtrPoker.Prelude
