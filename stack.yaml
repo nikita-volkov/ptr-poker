@@ -1,6 +1,1 @@
-resolver: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/bb436b1b88ef65e7e5bba67e7950a0ecb7488a7e/snapshot.yaml
-extra-deps:
-- binary-0.8.8.0
-- bytestring-0.11.0.0
-- text-1.2.4.0
-allow-newer: true
+resolver: https://raw.githubusercontent.com/nikita-volkov/stack-snapshot/b7113adc9d1570e92f23ef95966ecf58db355457/snapshot.yaml

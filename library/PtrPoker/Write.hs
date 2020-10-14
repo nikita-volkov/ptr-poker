@@ -71,7 +71,7 @@ as zero.
 {-# INLINE zeroNonRealDoubleAsciiDec #-}
 zeroNonRealDoubleAsciiDec :: Double -> Write
 zeroNonRealDoubleAsciiDec a =
-  if isNaN a || isInfinite a || isNegativeZero a
+  if a == 0 || isNaN a || isInfinite a || isNegativeZero a
     then word8 48
     else if a < 0
       then word8 45 <> byteString (ByteString.double (negate a))
