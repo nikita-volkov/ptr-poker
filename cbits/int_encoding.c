@@ -15,7 +15,6 @@ void rev_poke_int64
   uint8_t* dst
 )
 {
-
   bool negate = false;
 
   if (val < 0) {
@@ -34,5 +33,30 @@ void rev_poke_int64
   if (negate) {
     *--dst = '-';
   }
+}
 
+void rev_poke_int
+(
+  int val,
+  char* dst
+)
+{
+  bool negate = false;
+
+  if (val < 0) {
+    val = -val;
+    negate = true;
+  }
+
+  do
+  {
+    int b4 = val;
+    val /= 10;
+    *--dst = b4 - val * 10 + 48;
+  }
+  while(val);
+
+  if (negate) {
+    *--dst = '-';
+  }
 }
