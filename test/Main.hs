@@ -13,6 +13,18 @@ import qualified Numeric.Limits as NumericLimits
 main =
   defaultMain $ pure $ checkParallel $ $$(discover)
 
+prop_doubleAsciiDec =
+  withTests 999 $
+  property $ do
+    a <- forAll realFloatGen
+    let
+      string =
+        Char8ByteString.unpack (Write.writeToByteString (Write.doubleAsciiDec a))
+    annotate string
+    if isNaN a
+      then string === "NaN"
+      else read string === a
+
 prop_realZeroNonRealDoubleAsciiDec =
   withTests 999 $
   property $ do

@@ -63,6 +63,26 @@ int64AsciiDec a =
       Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
 
 {-|
+Render double interpreting non-real values,
+such as @NaN@, @Infinity@, @-Infinity@,
+as is.
+-}
+{-# INLINE doubleAsciiDec #-}
+doubleAsciiDec :: Double -> Write
+doubleAsciiDec a =
+  if a == 0
+    then word8 48
+    else if isNaN a
+      then "NaN"
+      else if isInfinite a
+        then if a < 0
+          then "-Infinity"
+          else "Infinity"
+        else if a < 0
+          then word8 45 <> byteString (ByteString.double (negate a))
+          else byteString (ByteString.double a)
+
+{-|
 Render double interpreting non real values,
 such as @NaN@, @Infinity@, @-Infinity@,
 as zero.
