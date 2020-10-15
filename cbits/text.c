@@ -21,11 +21,13 @@ uint8_t* encode_text
   size_t src_offset,
   size_t src_length
 )
+#if defined(__x86_64__)
 {
 
   src += src_offset;
   
-  const uint16_t *src_end = src + src_length;
+  const uint16_t* src_end = src + src_length;
+  const uint16_t* full_word_src_end = src_end - 4;
 
   while (src < src_end) {
     uint16_t x = *src++;
@@ -33,8 +35,7 @@ uint8_t* encode_text
     if (x <= 0x7F) {
       *dest++ = x;
 
-      #if defined(__x86_64__)
-      while (src_end - src >= 4) {
+      while (src < full_word_src_end) {
         uint64_t x = *((uint64_t *) src);
 
         if (x & 0xFF80FF80FF80FF80ULL) {
@@ -52,26 +53,13 @@ uint8_t* encode_text
           }
           break;
         }
+        
         *dest++ = x & 0xFFFF;
         *dest++ = (x >> 16) & 0xFFFF;
         *dest++ = (x >> 32) & 0xFFFF;
         *dest++ = x >> 48;
         src += 4;
       }
-      #endif
-
-      #if defined(__i386__)
-      while (src_end - src >= 2) {
-        uint32_t x = *((uint32_t *) src);
-
-        if (x & 0xFF80FF80)
-          break;
-        *dest++ = x & 0xFFFF;
-        *dest++ = x >> 16;
-        src += 2;
-      }
-      #endif
-      
     }
     else if (x <= 0x7FF) {
       *dest++ = (x >> 6) | 0xC0;
@@ -94,6 +82,54 @@ uint8_t* encode_text
 
   return dest;
 }
+#elif defined(__i386__)
+{
+
+  src += src_offset;
+  
+  const uint16_t* src_end = src + src_length;
+  const uint16_t* full_word_src_end = src_end - 2;
+
+  while (src < src_end) {
+    uint16_t x = *src++;
+
+    if (x <= 0x7F) {
+      *dest++ = x;
+
+      while (src < full_word_src_end) {
+        uint32_t x = *((uint32_t *) src);
+
+        if (x & 0xFF80FF80)
+          break;
+        *dest++ = x & 0xFFFF;
+        *dest++ = x >> 16;
+        src += 2;
+      }
+
+    }
+    else if (x <= 0x7FF) {
+      *dest++ = (x >> 6) | 0xC0;
+      *dest++ = (x & 0x3f) | 0x80;
+    }
+    else if (x < 0xD800 || x > 0xDBFF) {
+      *dest++ = (x >> 12) | 0xE0;
+      *dest++ = ((x >> 6) & 0x3F) | 0x80;
+      *dest++ = (x & 0x3F) | 0x80;
+    } else {
+      uint32_t c =
+        ((((uint32_t) x) - 0xD800) << 10) + 
+        (((uint32_t) *src++) - 0xDC00) + 0x10000;
+      *dest++ = (c >> 18) | 0xF0;
+      *dest++ = ((c >> 12) & 0x3F) | 0x80;
+      *dest++ = ((c >> 6) & 0x3F) | 0x80;
+      *dest++ = (c & 0x3F) | 0x80;
+    }
+  }
+
+  return dest;
+}
+#endif
+
 
 int count_text_allocation_size
 (
