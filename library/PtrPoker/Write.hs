@@ -121,3 +121,8 @@ scientificAsciiDec =
 byteString :: ByteString -> Write
 byteString a =
   Write (ByteString.length a) (Poke.byteString a)
+
+{-# INLINE textUtf8 #-}
+textUtf8 :: Text -> Write
+textUtf8 a =
+  Write (Size.textUtf8 a) (Poke.textUtf8 a)

@@ -5,6 +5,9 @@ module PtrPoker.Size
 where
 
 import PtrPoker.Prelude
+import qualified Data.Text.Internal as Text
+import qualified Data.Text.Array as TextArray
+import qualified PtrPoker.Ffi as Ffi
 
 
 {-# INLINE word64AsciiDec #-}
@@ -128,3 +131,11 @@ int64AsciiDec x =
           else if x > 9
             then 2
             else 1
+
+{-# INLINE textUtf8 #-}
+textUtf8 :: Text -> Int
+textUtf8 (Text.Text arr off len) =
+  Ffi.countTextAllocationSize
+    (TextArray.aBA arr) (fromIntegral off) (fromIntegral len)
+    & unsafeDupablePerformIO
+    & fromIntegral

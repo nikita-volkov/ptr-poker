@@ -5,6 +5,8 @@ import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.Ffi as Ffi
+import qualified Data.Text.Internal as Text
+import qualified Data.Text.Array as TextArray
 
 
 {-# RULES
@@ -58,6 +60,11 @@ lWord64 a =
 bWord64 :: Word64 -> Poke
 bWord64 a =
   Poke (\ p -> PrimIO.pokeBEWord64 p a $> plusPtr p 8)
+
+{-# INLINE textUtf8 #-}
+textUtf8 :: Text -> Poke
+textUtf8 (Text.Text arr off len) =
+  Poke (\ p -> Ffi.encodeText p (TextArray.aBA arr) (fromIntegral off) (fromIntegral len))
 
 
 -- * ASCII integers
