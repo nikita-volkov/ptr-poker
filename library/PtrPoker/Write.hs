@@ -12,6 +12,7 @@ import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Internal as ByteString
 
 
+{-# INLINABLE writeToByteString #-}
 writeToByteString :: Write -> ByteString
 writeToByteString Write{..} =
   ByteString.unsafeCreate writeSize (void . Poke.pokePtr writePoke)
