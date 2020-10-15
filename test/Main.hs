@@ -81,7 +81,7 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
     annotate string
     read string === 0
 
-prop_text =
+prop_textUtf8 =
   withTests 999 $
   property $ do
     a <- forAll (Gen.text (Range.exponential 0 9999) Gen.unicode)
