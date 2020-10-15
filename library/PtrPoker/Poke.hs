@@ -39,10 +39,10 @@ concat :: Foldable f => f Poke -> Poke
 concat pokers =
   Poke (\ p -> foldM (\ p (Poke io) -> io p) p pokers)
 
-{-# INLINE[1] byteString #-}
+{-# INLINE byteString #-}
 byteString :: ByteString -> Poke
 byteString bs =
-  Poke $ \ ptr -> ByteStringIO.pokeByteString ptr bs
+  Poke $ \ ptr -> inline ByteStringIO.pokeByteString ptr bs
 
 {-# INLINE[1] word8 #-}
 word8 :: Word8 -> Poke

@@ -120,7 +120,7 @@ scientificAsciiDec =
 {-# INLINE byteString #-}
 byteString :: ByteString -> Write
 byteString a =
-  Write (ByteString.length a) (Poke.byteString a)
+  Write (ByteString.length a) (inline Poke.byteString a)
 
 {-|
 Benchmark results in comparison to @Data.Text.Encoding.'Data.Text.Encoding.decodeUtf8'@.
@@ -138,7 +138,7 @@ Benchmark results in comparison to @Data.Text.Encoding.'Data.Text.Encoding.decod
 >text/greek/10                   mean 487.4 ns  ( +- 7.031 ns  )
 >text/greek/100                  mean 4.313 μs  ( +- 109.0 ns  )
 -}
-{-# INLINE textUtf8 #-}
+{-# INLINABLE textUtf8 #-}
 textUtf8 :: Text -> Write
-textUtf8 a =
-  Write (Size.textUtf8 a) (Poke.textUtf8 a)
+textUtf8 =
+  byteString . ByteString.textUtf8

@@ -1,10 +1,13 @@
 module PtrPoker.ByteString
 where
 
-import PtrPoker.Prelude
+import PtrPoker.Prelude hiding (empty)
+import Data.ByteString
 import Data.ByteString.Internal
 import Data.ByteString.Builder.Prim
 import qualified Data.Text as Text
+import qualified Data.Text.Array as TextArray
+import qualified Data.Text.Internal as TextInternal
 import qualified Data.Text.Encoding as TextEncoding
 import qualified Data.ByteString.Lazy as Lazy
 import qualified Data.ByteString.Builder as Builder
@@ -36,3 +39,14 @@ unsafeCreateDownToN allocSize populate =
     fp <- mallocByteString allocSize
     actualSize <- withForeignPtr fp (\ p -> populate (plusPtr p (pred allocSize)))
     return $! PS fp (allocSize - actualSize) actualSize
+
+{-# INLINABLE textUtf8 #-}
+textUtf8 :: Text -> ByteString
+textUtf8 (TextInternal.Text arr off len) =
+  if len == 0
+    then
+      empty
+    else
+      unsafeCreateUptoN (len * 3) $ \ ptr -> do
+        postPtr <- inline Ffi.encodeText ptr (TextArray.aBA arr) (fromIntegral off) (fromIntegral len)
+        return (minusPtr postPtr ptr)
