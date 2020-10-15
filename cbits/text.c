@@ -32,6 +32,46 @@ uint8_t* encode_text
 
     if (x <= 0x7F) {
       *dest++ = x;
+
+      #if defined(__x86_64__)
+      while (src_end - src >= 4) {
+        uint64_t x = *((uint64_t *) src);
+
+        if (x & 0xFF80FF80FF80FF80ULL) {
+          if (!(x & 0x000000000000FF80ULL)) {
+            *dest++ = x & 0xFFFF;
+            src++;
+            if (!(x & 0x00000000FF800000ULL)) {
+              *dest++ = (x >> 16) & 0xFFFF;
+              src++;
+              if (!(x & 0x0000FF8000000000ULL)) {
+                *dest++ = (x >> 32) & 0xFFFF;
+                src++;
+              }
+            }
+          }
+          break;
+        }
+        *dest++ = x & 0xFFFF;
+        *dest++ = (x >> 16) & 0xFFFF;
+        *dest++ = (x >> 32) & 0xFFFF;
+        *dest++ = x >> 48;
+        src += 4;
+      }
+      #endif
+
+      #if defined(__i386__)
+      while (src_end - src >= 2) {
+        uint32_t x = *((uint32_t *) src);
+
+        if (x & 0xFF80FF80)
+          break;
+        *dest++ = x & 0xFFFF;
+        *dest++ = x >> 16;
+        src += 2;
+      }
+      #endif
+      
     }
     else if (x <= 0x7FF) {
       *dest++ = (x >> 6) | 0xC0;
