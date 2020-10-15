@@ -137,17 +137,45 @@ int count_text_allocation_size
   size_t src_off,
   size_t src_len
 )
+#if defined(__x86_64__)
 {
   src_ptr += src_off;
-  const uint16_t *end_ptr = src_ptr + src_len;
+
+  const uint16_t* after_src_ptr = src_ptr + src_len;
+  const uint16_t* full_word_after_src_ptr = after_src_ptr - 4;
 
   size_t size = 0;
 
-  while (src_ptr < end_ptr) {
+  while (src_ptr < after_src_ptr) {
     uint16_t w = *src_ptr++;
 
     if (w <= 0x7F) {
       size += 1;
+
+      /* Try to go in batches of 4 bytes. */
+      while (src_ptr < full_word_after_src_ptr) {
+        uint64_t x = *((uint64_t*) src_ptr);
+
+        if (x & 0xFF80FF80FF80FF80ULL) {
+          if (!(x & 0x000000000000FF80ULL)) {
+            size++;
+            src_ptr++;
+            if (!(x & 0x00000000FF800000ULL)) {
+              size++;
+              src_ptr++;
+              if (!(x & 0x0000FF8000000000ULL)) {
+                size++;
+                src_ptr++;
+              }
+            }
+          }
+          break;
+        }
+        
+        size += 4;
+        src_ptr += 4;
+      }
+
     }
     else if (w <= 0x7FF) {
       size += 2;
@@ -162,3 +190,43 @@ int count_text_allocation_size
 
   return size;
 }
+#elif defined(__i386__)
+{
+  src_ptr += src_off;
+
+  const uint16_t* after_src_ptr = src_ptr + src_len;
+  const uint16_t* full_word_after_src_ptr = after_src_ptr - 2;
+
+  size_t size = 0;
+
+  while (src_ptr < after_src_ptr) {
+    uint16_t w = *src_ptr++;
+
+    if (w <= 0x7F) {
+      size += 1;
+
+      /* Try to go in batches of 2 bytes. */
+      while (src_ptr < full_word_after_src_ptr) {
+        uint32_t x = *((uint32_t *) src_ptr);
+
+        if (x & 0xFF80FF80) break;
+        
+        size += 2;
+        src_ptr += 2;
+      }
+
+    }
+    else if (w <= 0x7FF) {
+      size += 2;
+    }
+    else if (w < 0xD800 || w > 0xDBFF) {
+      size += 3;
+    } else {
+      src_ptr++;
+      size += 4;
+    }
+  }
+
+  return size;
+}
+#endif
