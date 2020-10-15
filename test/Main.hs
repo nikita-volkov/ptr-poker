@@ -6,6 +6,7 @@ import Hedgehog.Main
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import qualified Data.ByteString.Char8 as Char8ByteString
+import qualified Data.Text.Encoding as Text
 import qualified PtrPoker.Write as Write
 import qualified PtrPoker.Size as Size
 import qualified Numeric.Limits as NumericLimits
@@ -79,6 +80,13 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
         Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
     annotate string
     read string === 0
+
+prop_text =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.unicode)
+    Write.writeToByteString (Write.textUtf8 a)
+      === Text.encodeUtf8 a
 
 
 -- * Gens

@@ -1,8 +1,10 @@
+{-# LANGUAGE UnliftedFFITypes #-}
 module PtrPoker.Ffi
 where
 
 import PtrPoker.Prelude
 import Foreign.C
+import GHC.Base (ByteArray#, MutableByteArray#)
 
 
 foreign import ccall unsafe "static int_dec"
@@ -31,3 +33,9 @@ foreign import ccall unsafe "static rev_poke_uint64"
 
 foreign import ccall unsafe "static dtoa_grisu3"
   pokeDouble :: Double -> Ptr Word8 -> IO CInt
+
+foreign import ccall unsafe "static count_text_allocation_size"
+  countTextAllocationSize :: ByteArray# -> CSize -> CSize -> IO CInt
+
+foreign import ccall unsafe "static encode_text"
+  encodeText :: Ptr Word8 -> ByteArray# -> CSize -> CSize -> IO (Ptr Word8)
