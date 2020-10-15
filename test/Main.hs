@@ -81,6 +81,13 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
     annotate string
     read string === 0
 
+prop_sizeOfTextUtf8 =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.unicode)
+    Size.textUtf8 a
+      === Char8ByteString.length (Text.encodeUtf8 a)
+
 prop_textUtf8 =
   withTests 999 $
   property $ do
