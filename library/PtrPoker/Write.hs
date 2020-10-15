@@ -122,6 +122,22 @@ byteString :: ByteString -> Write
 byteString a =
   Write (ByteString.length a) (Poke.byteString a)
 
+{-|
+Benchmark results in comparison to @Data.Text.Encoding.'Data.Text.Encoding.decodeUtf8'@.
+
+>ptr-poker/latin/1               mean 50.85 ns  ( +- 1.037 ns  )
+>ptr-poker/latin/10              mean 218.9 ns  ( +- 1.608 ns  )
+>ptr-poker/latin/100             mean 1.748 μs  ( +- 24.90 ns  )
+>ptr-poker/greek/1               mean 103.7 ns  ( +- 1.326 ns  )
+>ptr-poker/greek/10              mean 564.1 ns  ( +- 4.206 ns  )
+>ptr-poker/greek/100             mean 5.164 μs  ( +- 37.16 ns  )
+>text/latin/1                    mean 63.20 ns  ( +- 4.031 ns  )
+>text/latin/10                   mean 208.7 ns  ( +- 15.24 ns  )
+>text/latin/100                  mean 1.327 μs  ( +- 60.74 ns  )
+>text/greek/1                    mean 99.27 ns  ( +- 5.202 ns  )
+>text/greek/10                   mean 487.4 ns  ( +- 7.031 ns  )
+>text/greek/100                  mean 4.313 μs  ( +- 109.0 ns  )
+-}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Write
 textUtf8 a =
