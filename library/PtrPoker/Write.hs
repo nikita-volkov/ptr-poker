@@ -125,18 +125,18 @@ byteString a =
 {-|
 Benchmark results in comparison to @Data.Text.Encoding.'Data.Text.Encoding.decodeUtf8'@.
 
->ptr-poker/latin/1               mean 50.85 ns  ( +- 1.037 ns  )
->ptr-poker/latin/10              mean 218.9 ns  ( +- 1.608 ns  )
->ptr-poker/latin/100             mean 1.748 μs  ( +- 24.90 ns  )
->ptr-poker/greek/1               mean 103.7 ns  ( +- 1.326 ns  )
->ptr-poker/greek/10              mean 564.1 ns  ( +- 4.206 ns  )
->ptr-poker/greek/100             mean 5.164 μs  ( +- 37.16 ns  )
->text/latin/1                    mean 63.20 ns  ( +- 4.031 ns  )
->text/latin/10                   mean 208.7 ns  ( +- 15.24 ns  )
->text/latin/100                  mean 1.327 μs  ( +- 60.74 ns  )
->text/greek/1                    mean 99.27 ns  ( +- 5.202 ns  )
->text/greek/10                   mean 487.4 ns  ( +- 7.031 ns  )
->text/greek/100                  mean 4.313 μs  ( +- 109.0 ns  )
+> textUtf8/ptr-poker/latin/1               mean 57.06 ns  ( +- 3.283 ns  )
+> textUtf8/ptr-poker/latin/10              mean 214.1 ns  ( +- 8.601 ns  )
+> textUtf8/ptr-poker/latin/100             mean 1.536 μs  ( +- 75.03 ns  )
+> textUtf8/ptr-poker/greek/1               mean 85.98 ns  ( +- 5.038 ns  )
+> textUtf8/ptr-poker/greek/10              mean 482.1 ns  ( +- 12.38 ns  )
+> textUtf8/ptr-poker/greek/100             mean 4.398 μs  ( +- 33.94 ns  )
+> textUtf8/text/latin/1                    mean 60.28 ns  ( +- 3.517 ns  )
+> textUtf8/text/latin/10                   mean 201.6 ns  ( +- 8.118 ns  )
+> textUtf8/text/latin/100                  mean 1.323 μs  ( +- 51.25 ns  )
+> textUtf8/text/greek/1                    mean 99.14 ns  ( +- 1.264 ns  )
+> textUtf8/text/greek/10                   mean 483.4 ns  ( +- 5.844 ns  )
+> textUtf8/text/greek/100                  mean 4.238 μs  ( +- 40.55 ns  )
 -}
 {-# INLINABLE textUtf8 #-}
 textUtf8 :: Text -> Write
