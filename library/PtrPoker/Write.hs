@@ -12,6 +12,9 @@ import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Internal as ByteString
 
 
+{-|
+Execute Write, producing strict ByteString.
+-}
 {-# INLINABLE writeToByteString #-}
 writeToByteString :: Write -> ByteString
 writeToByteString Write{..} =
@@ -38,16 +41,25 @@ instance Monoid Write where
   mempty =
     Write 0 mempty
 
+{-|
+Reuses the IsString instance of 'ByteString'.
+-}
 instance IsString Write where
   {-# INLINE fromString #-}
   fromString =
     byteString . fromString
 
+{-|
+Render Word8 as byte.
+-}
 {-# INLINE word8 #-}
 word8 :: Word8 -> Write
 word8 a =
   Write 1 (Poke.word8 a)
 
+{-|
+Render Word64 in ASCII decimal.
+-}
 {-# INLINE word64AsciiDec #-}
 word64AsciiDec :: Word64 -> Write
 word64AsciiDec a =
@@ -58,11 +70,17 @@ word64AsciiDec a =
     poke =
       Poke.sizedReverse size (Ffi.revPokeUInt64 (fromIntegral a))
 
+{-|
+Render Word in ASCII decimal.
+-}
 {-# INLINE wordAsciiDec #-}
 wordAsciiDec :: Word -> Write
 wordAsciiDec =
   word64AsciiDec . fromIntegral
 
+{-|
+Render Int64 in ASCII decimal.
+-}
 {-# INLINE int64AsciiDec #-}
 int64AsciiDec :: Int64 -> Write
 int64AsciiDec a =
@@ -73,6 +91,9 @@ int64AsciiDec a =
     poke =
       Poke.sizedReverse size (Ffi.revPokeInt64 (fromIntegral a))
 
+{-|
+Render Int in ASCII decimal.
+-}
 {-# INLINE intAsciiDec #-}
 intAsciiDec :: Int -> Write
 intAsciiDec =
@@ -112,18 +133,37 @@ zeroNonRealDoubleAsciiDec a =
       then word8 45 <> byteString (ByteString.double (negate a))
       else byteString (ByteString.double a)
 
+{-|
+Render Scientific in ASCII decimal.
+-}
 {-# INLINE scientificAsciiDec #-}
 scientificAsciiDec :: Scientific -> Write
 scientificAsciiDec =
   byteString . ByteString.scientific
 
+{-|
+Efficiently copy the contents of ByteString using @memcpy@.
+-}
 {-# INLINE byteString #-}
 byteString :: ByteString -> Write
 byteString a =
   Write (ByteString.length a) (inline Poke.byteString a)
 
 {-|
-Benchmark results in comparison to @Data.Text.Encoding.'Data.Text.Encoding.decodeUtf8'@.
+Render Text in UTF8.
+
+Does pretty much the same as 'Data.Text.Encoding.encodeUtf8',
+both implementation and performance-wise,
+while allowing you to avoid redundant @memcpy@
+compared to @('byteString' . 'Data.Text.Encoding.encodeUtf8')@.
+
+Following are the benchmark results comparing the performance of
+@('writeToByteString' . 'textUtf8')@ with
+@Data.Text.Encoding.'Data.Text.Encoding.encodeUtf8'@
+on inputs in Latin and Greek (requiring different number of surrogate bytes).
+The results show that they are quite similar.
+
+=== __Benchmark results__
 
 > textUtf8/ptr-poker/latin/1               mean 57.06 ns  ( +- 3.283 ns  )
 > textUtf8/ptr-poker/latin/10              mean 214.1 ns  ( +- 8.601 ns  )

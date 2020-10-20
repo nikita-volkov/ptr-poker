@@ -10,6 +10,14 @@ import qualified Data.Text.Array as TextArray
 import qualified PtrPoker.Ffi as Ffi
 
 
+{-|
+Efficiently count the amount of bytes required to encode Word64
+as a decimal number in ASCII.
+
+Implemented as a balanced tree of \"ifs\"
+centered around the middle of the range.
+This is much faster than anything based on logarithms.
+-}
 {-# INLINE word64AsciiDec #-}
 word64AsciiDec :: Word64 -> Int
 word64AsciiDec x =
@@ -53,6 +61,14 @@ word64AsciiDec x =
           then 2
           else 1
 
+{-|
+Efficiently count the amount of bytes required to encode Int64
+as a signed decimal number in ASCII.
+
+Implemented as a balanced tree of \"ifs\"
+centered around the middle of the range.
+This is much faster than anything based on logarithms.
+-}
 {-# INLINE int64AsciiDec #-}
 int64AsciiDec :: Int64 -> Int
 int64AsciiDec x =
@@ -132,6 +148,10 @@ int64AsciiDec x =
             then 2
             else 1
 
+{-|
+Efficiently count the amount of bytes required to encode Text
+in UTF8.
+-}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Int
 textUtf8 (Text.Text arr off len) =
