@@ -1,7 +1,7 @@
 module PtrPoker.Write
 where
 
-import PtrPoker.Prelude
+import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.Poke as Poke
@@ -35,11 +35,17 @@ instance Semigroup Write where
   {-# INLINE (<>) #-}
   Write lSize lPoke <> Write rSize rPoke =
     Write (lSize + rSize) (lPoke <> rPoke)
+  {-# INLINE sconcat #-}
+  sconcat =
+    concat
 
 instance Monoid Write where
   {-# INLINE mempty #-}
   mempty =
     Write 0 mempty
+  {-# INLINE mconcat #-}
+  mconcat =
+    concat
 
 {-|
 Reuses the IsString instance of 'ByteString'.
@@ -48,6 +54,16 @@ instance IsString Write where
   {-# INLINE fromString #-}
   fromString =
     byteString . fromString
+
+{-|
+Concatenate a foldable of writes.
+-}
+{-# INLINE concat #-}
+concat :: Foldable f => f Write -> Write
+concat f =
+  Write
+    (foldl' (\ a b -> a + writeSize b) 0 f)
+    (Poke.Poke (\ p -> foldM (\ p write -> Poke.pokePtr (writePoke write) p) p f))
 
 {-|
 Render Word8 as byte.
