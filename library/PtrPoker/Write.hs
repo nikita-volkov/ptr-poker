@@ -18,7 +18,7 @@ writeToByteString Write{..} =
   ByteString.unsafeCreate writeSize (void . Poke.pokePtr writePoke)
 
 {-|
-Specification of how much bytes to allocate and how to populate them.
+Specification of how many bytes to allocate and how to populate them.
 
 Useful for creating strict bytestrings and tasks like that.
 -}
