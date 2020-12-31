@@ -13,6 +13,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#if defined(__x86_64__)
+#include <xmmintrin.h>
+#include <emmintrin.h>
+#endif
 
 uint8_t* encode_text
 (
@@ -23,11 +27,10 @@ uint8_t* encode_text
 )
 #if defined(__x86_64__)
 {
-
   src += src_offset;
   
   const uint16_t* src_end = src + src_length;
-  const uint16_t* full_word_src_end = src_end - 4;
+  const uint16_t* full_xmm_src_end = src_end - 8;
 
   while (src < src_end) {
     uint16_t x = *src++;
@@ -35,30 +38,30 @@ uint8_t* encode_text
     if (x <= 0x7F) {
       *dest++ = x;
 
-      while (src < full_word_src_end) {
-        uint64_t x = *((uint64_t *) src);
+      while (src < full_xmm_src_end) {
+        union { uint64_t halves[2]; __m128i whole; } eight_chars;
+        eight_chars.whole = _mm_loadu_si128((__m128i *) src);
 
-        if (x & 0xFF80FF80FF80FF80ULL) {
-          if (!(x & 0x000000000000FF80ULL)) {
-            *dest++ = x & 0xFFFF;
-            src++;
-            if (!(x & 0x00000000FF800000ULL)) {
-              *dest++ = (x >> 16) & 0xFFFF;
-              src++;
-              if (!(x & 0x0000FF8000000000ULL)) {
-                *dest++ = (x >> 32) & 0xFFFF;
-                src++;
-              }
-            }
-          }
+        const uint64_t h1 = eight_chars.halves[0];
+        const uint64_t non_asciiness_of_the_first_half = h1 & 0xFF80FF80FF80FF80ULL;
+
+        if (non_asciiness_of_the_first_half) {
           break;
         }
-        
-        *dest++ = x & 0xFFFF;
-        *dest++ = (x >> 16) & 0xFFFF;
-        *dest++ = (x >> 32) & 0xFFFF;
-        *dest++ = x >> 48;
-        src += 4;
+
+        const __m128i eight_ascii_chars = _mm_packus_epi16(eight_chars.whole, eight_chars.whole);
+        _mm_storel_epi64((__m128i *)dest, eight_ascii_chars);
+
+        const uint64_t non_asciiness_of_the_second_half = eight_chars.halves[1] & 0xFF80FF80FF80FF80ULL;
+        if (non_asciiness_of_the_second_half) {
+          const int ascii_char_count = __builtin_ctz(non_asciiness_of_the_second_half) / 16;
+          dest += 4 + ascii_char_count;
+          src += 4 + ascii_char_count;
+          break;
+        }
+
+        dest += 8;
+        src += 8;
       }
     }
     else if (x <= 0x7FF) {
@@ -156,22 +159,14 @@ int count_text_allocation_size
       while (src_ptr < full_word_after_src_ptr) {
         uint64_t x = *((uint64_t*) src_ptr);
 
-        if (x & 0xFF80FF80FF80FF80ULL) {
-          if (!(x & 0x000000000000FF80ULL)) {
-            size++;
-            src_ptr++;
-            if (!(x & 0x00000000FF800000ULL)) {
-              size++;
-              src_ptr++;
-              if (!(x & 0x0000FF8000000000ULL)) {
-                size++;
-                src_ptr++;
-              }
-            }
-          }
+        const uint64_t non_asciiness = x & 0xFF80FF80FF80FF80ULL;
+        if (non_asciiness) {
+          const int ascii_char_count = __builtin_ctz(non_asciiness) / 16;
+          size += ascii_char_count;
+          src_ptr += ascii_char_count;
           break;
         }
-        
+
         size += 4;
         src_ptr += 4;
       }
