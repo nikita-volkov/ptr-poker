@@ -348,7 +348,7 @@ int dtoa_grisu3(double v, char *dst)
       for(i = 0; i < decimals; ++i) {
         dst[len-i+1] = dst[len-i-1];
       }
-      // put a 0 in front of the decimal point to make it a valid JSON double number.
+      // put a 0 in front of the decimal point to make it a valid Haskell floating point number.
       dst[0] = '0';
       dst[1] = '.';
       len+= 2;
@@ -368,7 +368,7 @@ int dtoa_grisu3(double v, char *dst)
   {
     // len here is 1!
     dst[1-d_exp] = dst[0];
-    // put a 0 in front of the decimal point to make it a valid JSON double number.
+    // put a 0 in front of the decimal point to make it a valid Haskell floating point number.
     dst[0] = '0';
     dst[1] = '.';
     for(i = 2; i < (1-d_exp); ++i) dst[i] = '0';
