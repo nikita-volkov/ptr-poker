@@ -29,7 +29,7 @@ scientific sci =
 
 double :: Double -> ByteString
 double dbl =
-  unsafeCreateUptoN 24 (\ ptr ->
+  unsafeCreateUptoN 25 (\ ptr ->
     Ffi.pokeDouble dbl ptr
       & fmap fromIntegral)
 

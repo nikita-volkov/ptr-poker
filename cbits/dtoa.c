@@ -343,18 +343,36 @@ int dtoa_grisu3(double v, char *dst)
   decimals = MIN(-d_exp, MAX(1, len-1));
   if (d_exp < 0 && len > 1) // Add decimal point?
   {
-    for(i = 0; i < decimals; ++i) dst[len-i] = dst[len-i-1];
-    dst[len++ - decimals] = '.';
+    int dot_pos = len-decimals;
+    if (dot_pos == 0) {
+      for(i = 0; i < decimals; ++i) {
+        dst[len-i+1] = dst[len-i-1];
+      }
+      // put a 0 in front of the decimal point to make it a valid Haskell floating point number.
+      dst[0] = '0';
+      dst[1] = '.';
+      len+= 2;
+    } else {
+      for(i = 0; i < decimals; ++i) {
+        dst[len-i] = dst[len-i-1];
+      }
+      dst[dot_pos] = '.';
+      len++;
+    }
+
     d_exp += decimals;
     // Need scientific notation as well?
     if (d_exp != 0) { dst[len++] = 'e'; len += i_to_str(d_exp, dst+len); }
   }
   else if (d_exp < 0 && d_exp >= -3) // Add decimal point for numbers of form 0.000x where it's shorter?
   {
-    for(i = 0; i < len; ++i) dst[len-d_exp-1-i] = dst[len-i-1];
-    dst[0] = '.';
-    for(i = 1; i < -d_exp; ++i) dst[i] = '0';
-    len += -d_exp;
+    // len here is 1!
+    dst[1-d_exp] = dst[0];
+    // put a 0 in front of the decimal point to make it a valid Haskell floating point number.
+    dst[0] = '0';
+    dst[1] = '.';
+    for(i = 2; i < (1-d_exp); ++i) dst[i] = '0';
+    len += -d_exp+1;
   }
   // Add scientific notation?
   else if (d_exp < 0 || d_exp > 2) { dst[len++] = 'e'; len += i_to_str(d_exp, dst+len); }
