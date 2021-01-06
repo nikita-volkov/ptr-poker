@@ -110,4 +110,16 @@ nonRealRealFloatGen =
   Gen.element [0 / 0, 1 / 0, (-1) / 0, -0]
 
 realRealFloatGen =
+  Gen.frequency [
+    (50, fullRangeExponentialRealFloatGen)
+    ,
+    (50, simpleZeroToOneRealFloatGen)
+    ]
+
+fullRangeExponentialRealFloatGen =
   Gen.realFloat (Range.exponentialFloat NumericLimits.minValue NumericLimits.maxValue)
+
+simpleZeroToOneRealFloatGen =
+  do
+    int <- Gen.int (Range.exponential 0 999999)
+    return (read ("0." <> show int))
