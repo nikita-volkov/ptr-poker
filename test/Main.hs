@@ -84,17 +84,30 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
 prop_sizeOfTextUtf8 =
   withTests 999 $
   property $ do
-    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.unicode)
+    a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
     Size.textUtf8 a
       === Char8ByteString.length (Text.encodeUtf8 a)
+
+prop_sizeOfTextASCII =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
+    Size.textUtf8 a
+      === Char8ByteString.length (Text.encodeUtf8 a)
+
+prop_textASCII =
+  withTests 999 $
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
+    Write.writeToByteString (Write.textUtf8 a)
+      === Text.encodeUtf8 a
 
 prop_textUtf8 =
   withTests 999 $
   property $ do
-    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.unicode)
+    a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
     Write.writeToByteString (Write.textUtf8 a)
       === Text.encodeUtf8 a
-
 
 -- * Gens
 -------------------------
