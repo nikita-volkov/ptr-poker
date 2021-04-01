@@ -8,6 +8,14 @@ import qualified Data.Text.Encoding as Text
 
 main =
   defaultMain [
+    bgroup "bWord32" [
+        bench "4"
+          $ nf
+            (\(a,b,c,d) -> Write.writeToByteString $
+                Write.bWord32 a <> Write.bWord32 b <> Write.bWord32 c <> Write.bWord32 d)
+            (1,2,3,4)
+      ]
+    ,
     bgroup "textUtf8" $ let
       latinSampleBySize size =
         enumFromTo 'a' 'z' &
