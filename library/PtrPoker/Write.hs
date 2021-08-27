@@ -122,6 +122,54 @@ bWord64 a =
   Write 8 (Poke.bWord64 a)
 
 {-|
+Render Int16 in Little-endian.
+-}
+{-# INLINE lInt16 #-}
+lInt16 :: Int16 -> Write
+lInt16 a =
+  Write 2 (Poke.lInt16 a)
+
+{-|
+Render Int16 in Big-endian.
+-}
+{-# INLINE bInt16 #-}
+bInt16 :: Int16 -> Write
+bInt16 a =
+  Write 2 (Poke.bInt16 a)
+
+{-|
+Render Int32 in Little-endian.
+-}
+{-# INLINE lInt32 #-}
+lInt32 :: Int32 -> Write
+lInt32 a =
+  Write 4 (Poke.lInt32 a)
+
+{-|
+Render Int32 in Big-endian.
+-}
+{-# INLINE bInt32 #-}
+bInt32 :: Int32 -> Write
+bInt32 a =
+  Write 4 (Poke.bInt32 a)
+
+{-|
+Render Int64 in Little-endian.
+-}
+{-# INLINE lInt64 #-}
+lInt64 :: Int64 -> Write
+lInt64 a =
+  Write 8 (Poke.lInt64 a)
+
+{-|
+Render Int64 in Big-endian.
+-}
+{-# INLINE bInt64 #-}
+bInt64 :: Int64 -> Write
+bInt64 a =
+  Write 8 (Poke.bInt64 a)
+
+{-|
 Render Word64 in ASCII decimal.
 -}
 {-# INLINE word64AsciiDec #-}

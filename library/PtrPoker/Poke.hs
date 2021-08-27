@@ -115,6 +115,48 @@ bWord64 a =
   Poke (\ p -> PrimIO.pokeBEWord64 p a $> plusPtr p 8)
 
 {-|
+Encode Int16 in Little-endian.
+-}
+{-# INLINE lInt16 #-}
+lInt16 :: Int16 -> Poke
+lInt16 = lWord16 . fromIntegral
+
+{-|
+Encode Int16 in Big-endian.
+-}
+{-# INLINE bInt16 #-}
+bInt16 :: Int16 -> Poke
+bInt16 = bWord16 . fromIntegral
+
+{-|
+Encode Int32 in Little-endian.
+-}
+{-# INLINE lInt32 #-}
+lInt32 :: Int32 -> Poke
+lInt32 = lWord32 . fromIntegral
+
+{-|
+Encode Int32 in Big-endian.
+-}
+{-# INLINE bInt32 #-}
+bInt32 :: Int32 -> Poke
+bInt32 = bWord32 . fromIntegral
+
+{-|
+Encode Int64 in Little-endian.
+-}
+{-# INLINE lInt64 #-}
+lInt64 :: Int64 -> Poke
+lInt64 = lWord64 . fromIntegral
+
+{-|
+Encode Int64 in Big-endian.
+-}
+{-# INLINE bInt64 #-}
+bInt64 :: Int64 -> Poke
+bInt64 = bWord64 . fromIntegral
+
+{-|
 Encode Text in UTF8.
 -}
 {-# INLINE textUtf8 #-}
