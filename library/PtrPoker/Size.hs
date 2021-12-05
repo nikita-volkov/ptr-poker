@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 {-|
 Functions that compute the required allocation size by value.
 -}
@@ -6,9 +5,8 @@ module PtrPoker.Size
 where
 
 import PtrPoker.Prelude
-import qualified Data.Text.Internal as Text
-import qualified Data.Text.Array as TextArray
 import qualified PtrPoker.Ffi as Ffi
+import qualified PtrPoker.Text as Text
 
 
 {-|
@@ -155,11 +153,7 @@ in UTF8.
 -}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Int
-#if MIN_VERSION_text(2,0,0)
-textUtf8 (Text.Text (TextArray.ByteArray arr) off len) =
-#else
-textUtf8 (Text.Text (TextArray.aBA -> arr) off len) =
-#endif
+textUtf8 = Text.destruct $ \arr off len ->
   Ffi.countTextAllocationSize
     arr (fromIntegral off) (fromIntegral len)
     & unsafeDupablePerformIO

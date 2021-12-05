@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 module PtrPoker.ByteString
 where
 
@@ -6,15 +5,12 @@ import PtrPoker.Prelude hiding (empty)
 import Data.ByteString
 import Data.ByteString.Internal
 import Data.ByteString.Builder.Prim
-import qualified Data.Text as Text
-import qualified Data.Text.Array as TextArray
-import qualified Data.Text.Internal as TextInternal
-import qualified Data.Text.Encoding as TextEncoding
 import qualified Data.ByteString.Lazy as Lazy
 import qualified Data.ByteString.Builder as Builder
 import qualified Data.ByteString.Builder.Extra as Builder
 import qualified Data.ByteString.Builder.Scientific as ScientificBuilder
 import qualified PtrPoker.Ffi as Ffi
+import qualified PtrPoker.Text as Text
 
 
 builderWithStrategy strategy builder =
@@ -43,11 +39,7 @@ unsafeCreateDownToN allocSize populate =
 
 {-# INLINABLE textUtf8 #-}
 textUtf8 :: Text -> ByteString
-#if MIN_VERSION_text(2,0,0)
-textUtf8 (TextInternal.Text (TextArray.ByteArray arr) off len) =
-#else
-textUtf8 (TextInternal.Text (TextArray.aBA -> arr) off len) =
-#endif
+textUtf8 = Text.destruct $ \arr off len ->
   if len == 0
     then
       empty

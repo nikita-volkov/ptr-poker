@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 module PtrPoker.Poke
 where
 
@@ -6,8 +5,7 @@ import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.Ffi as Ffi
-import qualified Data.Text.Internal as Text
-import qualified Data.Text.Array as TextArray
+import qualified PtrPoker.Text as Text
 
 
 {-# RULES
@@ -162,11 +160,7 @@ Encode Text in UTF8.
 -}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Poke
-#if MIN_VERSION_text(2,0,0)
-textUtf8 (Text.Text (TextArray.ByteArray arr) off len) =
-#else
-textUtf8 (Text.Text (TextArray.aBA -> arr) off len) =
-#endif
+textUtf8 = Text.destruct $ \arr off len ->
   Poke (\ p -> Ffi.encodeText p arr (fromIntegral off) (fromIntegral len))
 
 -- * ASCII integers
