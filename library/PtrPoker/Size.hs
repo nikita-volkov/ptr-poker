@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-|
 Functions that compute the required allocation size by value.
 -}
@@ -154,8 +155,12 @@ in UTF8.
 -}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Int
-textUtf8 (Text.Text arr off len) =
+#if MIN_VERSION_text(2,0,0)
+textUtf8 (Text.Text (TextArray.ByteArray arr) off len) =
+#else
+textUtf8 (Text.Text (TextArray.aBA -> arr) off len) =
+#endif
   Ffi.countTextAllocationSize
-    (TextArray.aBA arr) (fromIntegral off) (fromIntegral len)
+    arr (fromIntegral off) (fromIntegral len)
     & unsafeDupablePerformIO
     & fromIntegral
