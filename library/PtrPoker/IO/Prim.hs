@@ -1,27 +1,26 @@
 {-# LANGUAGE CPP #-}
-module PtrPoker.IO.Prim
-where
+
+module PtrPoker.IO.Prim where
 
 import PtrPoker.Prelude
 import qualified PtrPoker.UncheckedShifting as UncheckedShifting
 
-
 {-# INLINE pokeStorable #-}
 pokeStorable :: Storable a => Ptr Word8 -> a -> IO ()
 pokeStorable ptr value =
-  {-# SCC "pokeStorable" #-} 
+  {-# SCC "pokeStorable" #-}
   poke (castPtr ptr) value
 
 {-# INLINE pokeWord8 #-}
 pokeWord8 :: Ptr Word8 -> Word8 -> IO ()
 pokeWord8 ptr value =
-  {-# SCC "pokeWord8" #-} 
+  {-# SCC "pokeWord8" #-}
   poke ptr value
 
 {-# INLINE pokeWord8Off #-}
 pokeWord8Off :: Ptr Word8 -> Int -> Word8 -> IO ()
 pokeWord8Off ptr off value =
-  {-# SCC "pokeWord8Off" #-} 
+  {-# SCC "pokeWord8Off" #-}
   pokeByteOff ptr off value
 
 {-# INLINE pokeBEWord16 #-}

@@ -1,10 +1,9 @@
 {-# LANGUAGE CPP #-}
-module PtrPoker.IO.ByteString
-where
 
-import PtrPoker.Prelude
+module PtrPoker.IO.ByteString where
+
 import Data.ByteString.Internal
-
+import PtrPoker.Prelude
 
 #if MIN_VERSION_bytestring(0,11,0)
 
