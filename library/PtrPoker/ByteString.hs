@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module PtrPoker.ByteString
 where
 
@@ -42,11 +43,15 @@ unsafeCreateDownToN allocSize populate =
 
 {-# INLINABLE textUtf8 #-}
 textUtf8 :: Text -> ByteString
-textUtf8 (TextInternal.Text arr off len) =
+#if MIN_VERSION_text(2,0,0)
+textUtf8 (TextInternal.Text (TextArray.ByteArray arr) off len) =
+#else
+textUtf8 (TextInternal.Text (TextArray.aBA -> arr) off len) =
+#endif
   if len == 0
     then
       empty
     else
       unsafeCreateUptoN (len * 3) $ \ ptr -> do
-        postPtr <- inline Ffi.encodeText ptr (TextArray.aBA arr) (fromIntegral off) (fromIntegral len)
+        postPtr <- inline Ffi.encodeText ptr arr (fromIntegral off) (fromIntegral len)
         return (minusPtr postPtr ptr)

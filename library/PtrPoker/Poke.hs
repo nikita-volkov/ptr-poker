@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module PtrPoker.Poke
 where
 
@@ -161,9 +162,12 @@ Encode Text in UTF8.
 -}
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Poke
-textUtf8 (Text.Text arr off len) =
-  Poke (\ p -> Ffi.encodeText p (TextArray.aBA arr) (fromIntegral off) (fromIntegral len))
-
+#if MIN_VERSION_text(2,0,0)
+textUtf8 (Text.Text (TextArray.ByteArray arr) off len) =
+#else
+textUtf8 (Text.Text (TextArray.aBA -> arr) off len) =
+#endif
+  Poke (\ p -> Ffi.encodeText p arr (fromIntegral off) (fromIntegral len))
 
 -- * ASCII integers
 -------------------------
