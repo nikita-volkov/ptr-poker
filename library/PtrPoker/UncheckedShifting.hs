@@ -80,16 +80,11 @@ shiftr_w32 = shiftR
 shiftr_w64 = shiftR
 #endif
 
--- | Select an implementation depending on the bit-size of words.
+-- | Select an implementation depending on the bit-size of 'Word's.
 -- Currently, it produces a runtime failure if the bitsize is different.
 -- This is detected by the testsuite.
 {-# INLINE caseWordSize_32_64 #-}
-caseWordSize_32_64 ::
-  -- | Value to use for 32-bit words.
-  a ->
-  -- | Value to use for 64-bit words.
-  a ->
-  a
+caseWordSize_32_64 :: a -> a -> a
 caseWordSize_32_64 f32 f64 =
   case finiteBitSize (undefined :: Word) of
     32 -> f32
