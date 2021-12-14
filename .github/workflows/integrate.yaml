@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['8.4.2', '9.0.1', '9.2.1']
+        ghc: ['8.4.2', '9.0.1']
 
     runs-on: ubuntu-latest
 
@@ -29,7 +29,7 @@ jobs:
         uses: haskell/actions/setup@v1.2.1
         with:
           ghc-version: ${{ matrix.ghc }}
-          cabal-version: 3.6.0.0
+          cabal-version: 3.4
       
       - run: cabal v2-update --enable-tests --enable-benchmarks
       - run: cabal v2-freeze --enable-tests --enable-benchmarks
