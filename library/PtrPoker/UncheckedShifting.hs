@@ -60,7 +60,7 @@ shiftr_w w s = fromIntegral $ (`shiftr_w64` s) $ fromIntegral w
 #endif
 
 #if !defined(__HADDOCK__)
-#if __GLASGOW_HASKELL__ >= 920
+#if __GLASGOW_HASKELL__ >= 902
 shiftr_w16 (W16# w) (I# i) = W16# (w `uncheckedShiftRLWord16#` i)
 shiftr_w32 (W32# w) (I# i) = W32# (w `uncheckedShiftRLWord32#` i)
 #else
