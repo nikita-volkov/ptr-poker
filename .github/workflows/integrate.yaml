@@ -7,7 +7,7 @@ on:
 jobs:
 
   check-formatting:
-    
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
         uses: haskell/actions/setup@v1.2.1
         with:
           ghc-version: ${{ matrix.ghc }}
-          cabal-version: 3.4
+          cabal-version: 3.6.1.0
       
       - run: cabal v2-update --enable-tests --enable-benchmarks
       - run: cabal v2-freeze --enable-tests --enable-benchmarks
