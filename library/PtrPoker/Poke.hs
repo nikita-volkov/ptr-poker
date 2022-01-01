@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+
 module PtrPoker.Poke where
 
 import qualified Data.Text.Array as TextArray

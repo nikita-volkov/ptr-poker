@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+
 module PtrPoker.ByteString where
 
 import Data.ByteString

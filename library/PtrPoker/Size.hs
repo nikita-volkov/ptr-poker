@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+
 -- |
 -- Functions that compute the required allocation size by value.
 module PtrPoker.Size where
@@ -202,10 +203,10 @@ int64AsciiDec x =
 -- in UTF8.
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Int
-textUtf8 = Text.destruct $ \arr off len ->
 #if MIN_VERSION_text(2,0,0)
-  len
+textUtf8 = Text.destruct $ \_arr _off len -> len
 #else
+textUtf8 = Text.destruct $ \arr off len ->
   Ffi.countTextAllocationSize
     arr
     (fromIntegral off)
