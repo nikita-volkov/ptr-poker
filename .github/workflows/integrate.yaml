@@ -3,6 +3,7 @@ on:
     branches:
       - master
       - dev
+  pull_request: {}
 
 jobs:
 
@@ -17,7 +18,9 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['8.4.2', '9.0.1']
+        ghc: ['8.4', '9.0']
+        text_constraint: ['text == 1.*', 'text == 2.*']
+      fail-fast: false
 
     runs-on: ubuntu-latest
 
@@ -26,11 +29,15 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Haskell
-        uses: haskell/actions/setup@v1.2.1
+        uses: haskell/actions/setup@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: 3.4
       
+      - run: |
+          echo "constraints: ${{ matrix.text_constraint }}" >> cabal.project
+          echo "allow-newer:" >> cabal.project
+          echo "  *:*" >> cabal.project
       - run: cabal v2-update --enable-tests --enable-benchmarks
       - run: cabal v2-freeze --enable-tests --enable-benchmarks
 

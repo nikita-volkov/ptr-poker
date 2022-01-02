@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module PtrPoker.ByteString where
 
 import Data.ByteString
@@ -7,6 +9,7 @@ import Data.ByteString.Builder.Prim
 import qualified Data.ByteString.Builder.Scientific as ScientificBuilder
 import Data.ByteString.Internal
 import qualified Data.ByteString.Lazy as Lazy
+import qualified Data.Text.Encoding as TextEncoding
 import qualified PtrPoker.Ffi as Ffi
 import PtrPoker.Prelude hiding (empty)
 import qualified PtrPoker.Text as Text
@@ -40,9 +43,13 @@ unsafeCreateDownToN allocSize populate =
 
 {-# INLINEABLE textUtf8 #-}
 textUtf8 :: Text -> ByteString
+#if MIN_VERSION_text(2,0,0)
+textUtf8 t = TextEncoding.encodeUtf8 t
+#else
 textUtf8 = Text.destruct $ \arr off len ->
   if len == 0
     then empty
     else unsafeCreateUptoN (len * 3) $ \ptr -> do
       postPtr <- inline Ffi.encodeText ptr arr (fromIntegral off) (fromIntegral len)
       return (minusPtr postPtr ptr)
+#endif

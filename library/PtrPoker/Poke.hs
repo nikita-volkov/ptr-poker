@@ -1,5 +1,9 @@
+{-# LANGUAGE CPP #-}
+
 module PtrPoker.Poke where
 
+import qualified Data.Text.Array as TextArray
+import qualified Data.Text.Internal as TextInternal
 import qualified PtrPoker.Ffi as Ffi
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
@@ -140,8 +144,15 @@ bInt64 = bWord64 . fromIntegral
 -- Encode Text in UTF8.
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Poke
+#if MIN_VERSION_text(2,0,0)
+textUtf8 (TextInternal.Text arr off len) =
+  Poke (\p -> do
+    stToIO $ TextArray.copyToPointer arr off p len
+    pure (plusPtr p len))
+#else
 textUtf8 = Text.destruct $ \arr off len ->
   Poke (\p -> Ffi.encodeText p arr (fromIntegral off) (fromIntegral len))
+#endif
 
 -- * ASCII integers
 
