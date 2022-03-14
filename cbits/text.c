@@ -85,7 +85,7 @@ uint8_t* encode_text
 
   return dest;
 }
-#elif defined(__i386__)
+#elif defined(__i386__) || defined(__arm64__)
 {
 
   src += src_offset;
@@ -185,7 +185,7 @@ int count_text_allocation_size
 
   return size;
 }
-#elif defined(__i386__)
+#elif defined(__i386__) || defined(__arm64__  )
 {
   src_ptr += src_off;
 
