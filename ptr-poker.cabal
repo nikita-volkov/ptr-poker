@@ -1,5 +1,5 @@
 name: ptr-poker
-version: 0.1.2.7
+version: 0.1.2.8
 synopsis: Pointer poking action construction and composition toolkit
 homepage: https://github.com/nikita-volkov/ptr-poker
 bug-reports: https://github.com/nikita-volkov/ptr-poker/issues
