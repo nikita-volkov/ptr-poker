@@ -6,4 +6,4 @@ $(find . -name "*.hs" \
   -not -path "./*.stack-work/*" \
   -not -path "./.git/*")
 
-stack build --fast
+stack build --fast --test
