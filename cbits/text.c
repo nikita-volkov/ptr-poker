@@ -140,52 +140,6 @@ int count_text_allocation_size
   size_t src_off,
   size_t src_len
 )
-#if defined(__x86_64__)
-{
-  src_ptr += src_off;
-
-  const uint16_t* after_src_ptr = src_ptr + src_len;
-  const uint16_t* full_word_after_src_ptr = after_src_ptr - 4;
-
-  size_t size = 0;
-
-  while (src_ptr < after_src_ptr) {
-    uint16_t w = *src_ptr++;
-
-    if (w <= 0x7F) {
-      size += 1;
-
-      /* Try to go in batches of 4 bytes. */
-      while (src_ptr < full_word_after_src_ptr) {
-        uint64_t x = *((uint64_t*) src_ptr);
-
-        const uint64_t non_asciiness = x & 0xFF80FF80FF80FF80ULL;
-        if (non_asciiness) {
-          const int ascii_char_count = __builtin_ctz(non_asciiness) / 16;
-          size += ascii_char_count;
-          src_ptr += ascii_char_count;
-          break;
-        }
-
-        size += 4;
-        src_ptr += 4;
-      }
-
-    }
-    else if (w <= 0x7FF) {
-      size += 2;
-    }
-    else if (w < 0xD800 || w > 0xDBFF) {
-      size += 3;
-    } else {
-      src_ptr++;
-      size += 4;
-    }
-  }
-
-  return size;
-}
-#elif defined(__i386__) || defined(__arm64__  )
 {
   src_ptr += src_off;
 
@@ -224,4 +178,3 @@ int count_text_allocation_size
 
   return size;
 }
-#endif
