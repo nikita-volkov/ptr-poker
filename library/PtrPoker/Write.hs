@@ -240,9 +240,31 @@ byteString a =
 -- Render Text in UTF8.
 --
 -- Does pretty much the same as 'Data.Text.Encoding.encodeUtf8',
+-- both implementation and performance-wise,
 -- while allowing you to avoid redundant @memcpy@
 -- compared to @('byteString' . 'Data.Text.Encoding.encodeUtf8')@.
+--
+-- Following are the benchmark results comparing the performance of
+-- @('writeToByteString' . 'textUtf8')@ with
+-- @Data.Text.Encoding.'Data.Text.Encoding.encodeUtf8'@
+-- on inputs in Latin and Greek (requiring different number of surrogate bytes).
+-- The results show that they are quite similar.
+--
+-- === __Benchmark results__
+--
+-- > textUtf8/ptr-poker/latin/1   25.61 ns
+-- > textUtf8/ptr-poker/latin/10  31.59 ns
+-- > textUtf8/ptr-poker/latin/100 121.5 ns
+-- > textUtf8/ptr-poker/greek/1   28.54 ns
+-- > textUtf8/ptr-poker/greek/10  41.97 ns
+-- > textUtf8/ptr-poker/greek/100 250.3 ns
+-- > textUtf8/text/latin/1        22.84 ns
+-- > textUtf8/text/latin/10       31.10 ns
+-- > textUtf8/text/latin/100      118.2 ns
+-- > textUtf8/text/greek/1        25.80 ns
+-- > textUtf8/text/greek/10       40.80 ns
+-- > textUtf8/text/greek/100      293.1 ns
 {-# INLINEABLE textUtf8 #-}
 textUtf8 :: Text -> Write
-textUtf8 =
-  byteString . ByteString.textUtf8
+textUtf8 a =
+  Write (Size.textUtf8 a) (Poke.textUtf8 a)
