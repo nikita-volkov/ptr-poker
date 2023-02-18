@@ -20,6 +20,7 @@ jobs:
       matrix:
         ghc: ['8.6', '9.2']
         text_constraint: ['text == 1.*', 'text == 2.*']
+        bytestring_constraint: ['bytestring == 0.10.*', 'bytestring == 0.11.*']
       fail-fast: false
 
     runs-on: ubuntu-latest
