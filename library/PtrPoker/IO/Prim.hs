@@ -3,7 +3,6 @@
 module PtrPoker.IO.Prim where
 
 import PtrPoker.Prelude
-import qualified PtrPoker.UncheckedShifting as UncheckedShifting
 
 {-# INLINE pokeStorable #-}
 pokeStorable :: Storable a => Ptr Word8 -> a -> IO ()
