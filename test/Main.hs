@@ -17,56 +17,50 @@ main =
   defaultMain $ pure $ checkParallel $ $$(discover)
 
 prop_word64Size =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.word64 (Range.exponential minBound maxBound))
-      Size.word64AsciiDec a
-        === length (show a)
+  property $ do
+    a <- forAll (Gen.word64 (Range.exponential minBound maxBound))
+    Size.word64AsciiDec a
+      === length (show a)
 
 prop_int64Size =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.int64 (Range.exponential minBound maxBound))
-      Size.int64AsciiDec a
-        === length (show a)
+  property $ do
+    a <- forAll (Gen.int64 (Range.exponential minBound maxBound))
+    Size.int64AsciiDec a
+      === length (show a)
 
 prop_wordAsciiDec =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.word (Range.exponential minBound maxBound))
-      let string =
-            Char8ByteString.unpack (Write.writeToByteString (Write.wordAsciiDec a))
-      annotate string
-      read string === a
+  property $ do
+    a <- forAll (Gen.word (Range.exponential minBound maxBound))
+    let string =
+          Char8ByteString.unpack (Write.writeToByteString (Write.wordAsciiDec a))
+    annotate string
+    read string === a
 
 prop_intAsciiDec =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.int (Range.exponential minBound maxBound))
-      let string =
-            Char8ByteString.unpack (Write.writeToByteString (Write.intAsciiDec a))
-      annotate string
-      read string === a
+  property $ do
+    a <- forAll (Gen.int (Range.exponential minBound maxBound))
+    let string =
+          Char8ByteString.unpack (Write.writeToByteString (Write.intAsciiDec a))
+    annotate string
+    read string === a
 
 prop_doubleAsciiDec =
-  withTests 999 $
-    property $ do
-      a <- forAll realFloatGen
-      let string =
-            Char8ByteString.unpack (Write.writeToByteString (Write.doubleAsciiDec a))
-      annotate string
-      if isNaN a
-        then string === "NaN"
-        else read string === a
+  property $ do
+    a <- forAll realFloatGen
+    let string =
+          Char8ByteString.unpack (Write.writeToByteString (Write.doubleAsciiDec a))
+    annotate string
+    if isNaN a
+      then string === "NaN"
+      else read string === a
 
 prop_realZeroNonRealDoubleAsciiDec =
-  withTests 999 $
-    property $ do
-      a <- forAll realRealFloatGen
-      let string =
-            Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
-      annotate string
-      read string === a
+  property $ do
+    a <- forAll realRealFloatGen
+    let string =
+          Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
+    annotate string
+    read string === a
 
 prop_nonRealZeroNonRealDoubleAsciiDec =
   withTests 99 $
@@ -78,32 +72,28 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
       read @Integer string === 0
 
 prop_sizeOfTextUtf8 =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
-      Size.textUtf8 a
-        === Char8ByteString.length (Text.encodeUtf8 a)
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
+    Size.textUtf8 a
+      === Char8ByteString.length (Text.encodeUtf8 a)
 
 prop_sizeOfTextASCII =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
-      Size.textUtf8 a
-        === Char8ByteString.length (Text.encodeUtf8 a)
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
+    Size.textUtf8 a
+      === Char8ByteString.length (Text.encodeUtf8 a)
 
 prop_textASCII =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
-      Write.writeToByteString (Write.textUtf8 a)
-        === Text.encodeUtf8 a
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
+    Write.writeToByteString (Write.textUtf8 a)
+      === Text.encodeUtf8 a
 
 prop_textUtf8 =
-  withTests 999 $
-    property $ do
-      a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
-      Write.writeToByteString (Write.textUtf8 a)
-        === Text.encodeUtf8 a
+  property $ do
+    a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
+    Write.writeToByteString (Write.textUtf8 a)
+      === Text.encodeUtf8 a
 
 -- * Gens
 
