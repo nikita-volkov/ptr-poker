@@ -72,7 +72,6 @@ library
     PtrPoker.IO.Prim
     PtrPoker.Prelude
     PtrPoker.Text
-    PtrPoker.UncheckedShifting
 
   c-sources:
     cbits/dtoa.c
