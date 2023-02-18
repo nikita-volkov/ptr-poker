@@ -92,10 +92,11 @@ test-suite test
   hs-source-dirs: test
   main-is:        Main.hs
   build-depends:
-    , hedgehog        >=1.0.3    && <2
-    , numeric-limits  >=0.1      && <0.2
+    , hedgehog           >=1.0.3    && <2
+    , isomorphism-class  >=0.1.0.7  && <0.2
+    , numeric-limits     >=0.1      && <0.2
     , ptr-poker
-    , rerebase        >=1.10.0.1 && <2
+    , rerebase           >=1.10.0.1 && <2
 
 benchmark bench
   import:           base-settings
