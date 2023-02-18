@@ -36,9 +36,8 @@ jobs:
           cabal-version: 3.4
       
       - run: |
+          echo "packages: ." >> cabal.project
           echo "constraints: ${{ matrix.text_constraint }}" >> cabal.project
-          echo "allow-newer:" >> cabal.project
-          echo "  *:*" >> cabal.project
       - run: cabal v2-update --enable-tests --enable-benchmarks
       - run: cabal v2-freeze --enable-tests --enable-benchmarks
 
