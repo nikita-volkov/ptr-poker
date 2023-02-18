@@ -2,8 +2,6 @@
 
 module PtrPoker.Poke where
 
-import qualified Data.Text.Array as TextArray
-import qualified Data.Text.Internal as TextInternal
 import qualified PtrPoker.Ffi as Ffi
 import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
