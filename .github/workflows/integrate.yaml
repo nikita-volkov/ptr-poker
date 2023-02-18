@@ -41,7 +41,7 @@ jobs:
       - run: cabal v2-update --enable-tests --enable-benchmarks
       - run: cabal v2-freeze --enable-tests --enable-benchmarks
 
-      - uses: actions/cache@v2.1.6
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.cabal/store
