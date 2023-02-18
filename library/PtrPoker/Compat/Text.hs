@@ -25,6 +25,7 @@ pokeInUtf8 :: Text -> Ptr Word8 -> IO (Ptr Word8)
 pokeInUtf8 (TextInternal.Text arr off len) p =
   stToIO (TextArray.copyToPointer arr off p len) $> plusPtr p len
 #else
+import qualified Data.ByteString.Internal as ByteStringInternal
 import qualified Data.Text.Array as TextArray
 import qualified Data.Text.Internal as TextInternal
 import qualified PtrPoker.Ffi as Ffi
@@ -47,10 +48,10 @@ utf8EncodingSize (TextInternal.Text (TextArray.Array arr) off len) =
 
 {-# INLINEABLE encodeInUtf8 #-}
 encodeInUtf8 :: Text -> ByteString
-encodeInUtf8 = destruct $ \arr off len ->
+encodeInUtf8 (TextInternal.Text (TextArray.Array arr) off len) =
   if len == 0
-    then empty
-    else unsafeCreateUptoN (len * 3) $ \ptr -> do
+    then mempty
+    else ByteStringInternal.unsafeCreateUptoN (len * 3) $ \ptr -> do
       postPtr <- inline Ffi.encodeText ptr arr (fromIntegral off) (fromIntegral len)
       return (minusPtr postPtr ptr)
 
