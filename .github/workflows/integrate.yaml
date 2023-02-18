@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['8.6', '9.4']
+        ghc: ['8.6', '9.2']
         text_constraint: ['text == 1.*', 'text == 2.*']
       fail-fast: false
 
@@ -26,10 +26,10 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Haskell
-        uses: haskell/actions/setup@v1
+        uses: haskell/actions/setup@v2
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: 3.4
