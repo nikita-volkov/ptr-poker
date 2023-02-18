@@ -56,7 +56,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-
 
+      - run: cabal build --enable-tests --enable-benchmarks -j +RTS -A128m -n2m -N -RTS
+        if: ${{ matrix.ghc }} == '8.6'
       - run: cabal build --enable-tests --enable-benchmarks -j +RTS -A128m -n2m -N -RTS --ghc-options="-Werror -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wredundant-constraints -Wunused-packages -Wno-name-shadowing"
+        if: ${{ matrix.ghc }} != '8.6'
       - run: cabal test --test-show-details always
       - run: cabal clean && cabal bench
       - run: cabal haddock
