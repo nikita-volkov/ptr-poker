@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module PtrPoker.ByteString where
 
@@ -8,6 +9,7 @@ import qualified Data.ByteString.Builder.Extra as Builder
 import qualified Data.ByteString.Builder.Scientific as ScientificBuilder
 import Data.ByteString.Internal
 import qualified Data.ByteString.Lazy as Lazy
+import qualified Data.Text.Encoding as TextEncoding
 import qualified PtrPoker.Ffi as Ffi
 import PtrPoker.Prelude hiding (empty)
 import qualified PtrPoker.Text as Text

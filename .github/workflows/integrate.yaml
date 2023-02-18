@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        ghc: ['8.4', '9.0']
+        ghc: ['8.6', '9.4']
         text_constraint: ['text == 1.*', 'text == 2.*']
       fail-fast: false
 
