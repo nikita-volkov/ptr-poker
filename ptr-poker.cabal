@@ -67,11 +67,11 @@ library
 
   other-modules:
     PtrPoker.ByteString
+    PtrPoker.Compat.ByteString
+    PtrPoker.Compat.Text
     PtrPoker.Ffi
-    PtrPoker.IO.ByteString
     PtrPoker.IO.Prim
     PtrPoker.Prelude
-    PtrPoker.Text
 
   c-sources:
     cbits/dtoa.c

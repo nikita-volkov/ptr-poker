@@ -1,12 +1,9 @@
-{-# LANGUAGE CPP #-}
-
 -- |
 -- Functions that compute the required allocation size by value.
 module PtrPoker.Size where
 
-import qualified PtrPoker.Ffi as Ffi
+import qualified PtrPoker.Compat.Text as TextCompat
 import PtrPoker.Prelude
-import qualified PtrPoker.Text as Text
 
 -- |
 -- Efficiently count the amount of bytes required to encode Word64
@@ -203,14 +200,4 @@ int64AsciiDec x =
 -- in UTF8.
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Int
-#if MIN_VERSION_text(2,0,0)
-textUtf8 = Text.destruct $ \_arr _off len -> len
-#else
-textUtf8 = Text.destruct $ \arr off len ->
-  Ffi.countTextAllocationSize
-    arr
-    (fromIntegral off)
-    (fromIntegral len)
-    & unsafeDupablePerformIO
-    & fromIntegral
-#endif
+textUtf8 = TextCompat.utf8EncodingSize

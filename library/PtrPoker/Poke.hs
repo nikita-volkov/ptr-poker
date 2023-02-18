@@ -1,15 +1,10 @@
-{-# LANGUAGE CPP #-}
-{-# OPTIONS_GHC -Wno-unused-imports #-}
-
 module PtrPoker.Poke where
 
-import qualified Data.Text.Array as TextArray
-import qualified Data.Text.Internal as TextInternal
+import qualified PtrPoker.Compat.ByteString as ByteStringCompat
+import qualified PtrPoker.Compat.Text as TextCompat
 import qualified PtrPoker.Ffi as Ffi
-import qualified PtrPoker.IO.ByteString as ByteStringIO
 import qualified PtrPoker.IO.Prim as PrimIO
 import PtrPoker.Prelude hiding (concat)
-import qualified PtrPoker.Text as Text
 
 {-# RULES
 "foldMap" forall f foldable.
@@ -54,7 +49,7 @@ concat pokers =
 {-# INLINE byteString #-}
 byteString :: ByteString -> Poke
 byteString bs =
-  Poke $ \ptr -> inline ByteStringIO.pokeByteString ptr bs
+  Poke $ inline ByteStringCompat.poke bs
 
 -- |
 -- Encode Word8 as byte, incrementing the pointer by 1.
@@ -145,15 +140,7 @@ bInt64 = bWord64 . fromIntegral
 -- Encode Text in UTF8.
 {-# INLINE textUtf8 #-}
 textUtf8 :: Text -> Poke
-#if MIN_VERSION_text(2,0,0)
-textUtf8 (TextInternal.Text arr off len) =
-  Poke (\p -> do
-    stToIO $ TextArray.copyToPointer arr off p len
-    pure (plusPtr p len))
-#else
-textUtf8 = Text.destruct $ \arr off len ->
-  Poke (\p -> Ffi.encodeText p arr (fromIntegral off) (fromIntegral len))
-#endif
+textUtf8 = Poke . TextCompat.pokeInUtf8
 
 -- * ASCII integers
 
