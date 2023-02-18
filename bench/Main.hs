@@ -1,10 +1,11 @@
 module Main where
 
+import Criterion.Main
 import qualified Data.Text.Encoding as Text
-import Gauge.Main
 import qualified PtrPoker.Write as Write
 import Prelude
 
+main :: IO ()
 main =
   defaultMain
     [ bgroup

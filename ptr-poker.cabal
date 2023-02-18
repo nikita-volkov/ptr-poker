@@ -91,11 +91,11 @@ test-suite test
   hs-source-dirs: test
   main-is:        Main.hs
   build-depends:
-    , hedgehog           >=1.0.3    && <2
-    , isomorphism-class  >=0.1.0.7  && <0.2
-    , numeric-limits     >=0.1      && <0.2
+    , hedgehog           >=1.2     && <2
+    , isomorphism-class  >=0.1.0.8 && <0.2
+    , numeric-limits     >=0.1     && <0.2
     , ptr-poker
-    , rerebase           >=1.10.0.1 && <2
+    , rerebase           >=1.16.1  && <2
 
 benchmark bench
   import:         base-settings
@@ -104,6 +104,6 @@ benchmark bench
   main-is:        Main.hs
   ghc-options:    -O2 -threaded -with-rtsopts=-N
   build-depends:
-    , gauge      >=0.2.5    && <0.3
+    , criterion  >=1.6    && <2
     , ptr-poker
-    , rerebase   >=1.10.0.1 && <2
+    , rerebase   >=1.16.1 && <2
