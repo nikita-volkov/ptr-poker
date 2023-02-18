@@ -3,7 +3,6 @@
 module PtrPoker.Ffi where
 
 import Foreign.C
-import GHC.Base (ByteArray#, MutableByteArray#)
 import PtrPoker.Prelude
 
 foreign import ccall unsafe "static int_dec"

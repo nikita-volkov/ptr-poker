@@ -5,15 +5,14 @@ module PtrPoker.ByteString where
 import Data.ByteString
 import qualified Data.ByteString.Builder as Builder
 import qualified Data.ByteString.Builder.Extra as Builder
-import Data.ByteString.Builder.Prim
 import qualified Data.ByteString.Builder.Scientific as ScientificBuilder
 import Data.ByteString.Internal
 import qualified Data.ByteString.Lazy as Lazy
-import qualified Data.Text.Encoding as TextEncoding
 import qualified PtrPoker.Ffi as Ffi
 import PtrPoker.Prelude hiding (empty)
 import qualified PtrPoker.Text as Text
 
+builderWithStrategy :: Builder.AllocationStrategy -> Builder.Builder -> ByteString
 builderWithStrategy strategy builder =
   builder
     & Builder.toLazyByteStringWith strategy Lazy.empty

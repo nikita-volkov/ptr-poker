@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
+
 module Main where
 
 import qualified Data.ByteString.Char8 as Char8ByteString
@@ -73,7 +75,7 @@ prop_nonRealZeroNonRealDoubleAsciiDec =
       let string =
             Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
       annotate string
-      read string === 0
+      read @Integer string === 0
 
 prop_sizeOfTextUtf8 =
   withTests 999 $

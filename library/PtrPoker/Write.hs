@@ -4,8 +4,6 @@ import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Internal as ByteString
 import qualified PtrPoker.ByteString as ByteString
 import qualified PtrPoker.Ffi as Ffi
-import qualified PtrPoker.IO.ByteString as ByteStringIO
-import qualified PtrPoker.IO.Prim as PrimIO
 import qualified PtrPoker.Poke as Poke
 import PtrPoker.Prelude hiding (concat)
 import qualified PtrPoker.Size as Size
