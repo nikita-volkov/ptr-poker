@@ -21,7 +21,7 @@ newtype Poke = Poke {pokePtr :: Ptr Word8 -> IO (Ptr Word8)}
 instance Semigroup Poke where
   {-# INLINE [1] (<>) #-}
   Poke lIO <> Poke rIO =
-    Poke (lIO >=> rIO)
+    Poke (\p -> lIO p >>= rIO)
   sconcat =
     concat
 
