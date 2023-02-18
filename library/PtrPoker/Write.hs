@@ -240,30 +240,8 @@ byteString a =
 -- Render Text in UTF8.
 --
 -- Does pretty much the same as 'Data.Text.Encoding.encodeUtf8',
--- both implementation and performance-wise,
 -- while allowing you to avoid redundant @memcpy@
 -- compared to @('byteString' . 'Data.Text.Encoding.encodeUtf8')@.
---
--- Following are the benchmark results comparing the performance of
--- @('writeToByteString' . 'textUtf8')@ with
--- @Data.Text.Encoding.'Data.Text.Encoding.encodeUtf8'@
--- on inputs in Latin and Greek (requiring different number of surrogate bytes).
--- The results show that they are quite similar.
---
--- === __Benchmark results__
---
--- > textUtf8/ptr-poker/latin/1               mean 51.54 ns  ( +- 3.083 ns  )
--- > textUtf8/ptr-poker/latin/10              mean 132.8 ns  ( +- 14.75 ns  )
--- > textUtf8/ptr-poker/latin/100             mean 860.6 ns  ( +- 66.61 ns  )
--- > textUtf8/ptr-poker/greek/1               mean 106.4 ns  ( +- 19.28 ns  )
--- > textUtf8/ptr-poker/greek/10              mean 498.4 ns  ( +- 8.022 ns  )
--- > textUtf8/ptr-poker/greek/100             mean 4.462 μs  ( +- 31.58 ns  )
--- > textUtf8/text/latin/1                    mean 52.77 ns  ( +- 3.311 ns  )
--- > textUtf8/text/latin/10                   mean 206.1 ns  ( +- 26.78 ns  )
--- > textUtf8/text/latin/100                  mean 1.337 μs  ( +- 43.34 ns  )
--- > textUtf8/text/greek/1                    mean 88.22 ns  ( +- 1.119 ns  )
--- > textUtf8/text/greek/10                   mean 475.2 ns  ( +- 21.15 ns  )
--- > textUtf8/text/greek/100                  mean 4.252 μs  ( +- 64.33 ns  )
 {-# INLINEABLE textUtf8 #-}
 textUtf8 :: Text -> Write
 textUtf8 =
