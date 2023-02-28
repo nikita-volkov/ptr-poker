@@ -80,10 +80,10 @@ library
     cbits/text.c
 
   build-depends:
-    , base        >=4.11    && <5
-    , bytestring  >=0.10    && <0.12
-    , scientific  >=0.3.6.2 && <0.4
-    , text        >=1       && <3
+    , base >=4.11 && <5
+    , bytestring >=0.10 && <0.12
+    , scientific >=0.3.6.2 && <0.4
+    , text >=1 && <3
 
 test-suite test
   import:         base-settings
@@ -91,11 +91,11 @@ test-suite test
   hs-source-dirs: test
   main-is:        Main.hs
   build-depends:
-    , hedgehog           >=1.2     && <2
-    , isomorphism-class  >=0.1.0.8 && <0.2
-    , numeric-limits     >=0.1     && <0.2
+    , hedgehog >=1.2 && <2
+    , isomorphism-class >=0.1.0.8 && <0.2
+    , numeric-limits >=0.1 && <0.2
     , ptr-poker
-    , rerebase           >=1.16.1  && <2
+    , rerebase >=1.16.1 && <2
 
 benchmark bench
   import:         base-settings
@@ -104,6 +104,6 @@ benchmark bench
   main-is:        Main.hs
   ghc-options:    -O2 -threaded -with-rtsopts=-N
   build-depends:
-    , criterion  >=1.6    && <2
+    , criterion >=1.6 && <2
     , ptr-poker
-    , rerebase   >=1.16.1 && <2
+    , rerebase >=1.16.1 && <2
