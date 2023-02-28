@@ -1,27 +1,54 @@
 {-# LANGUAGE CPP #-}
 
-module PtrPoker.Compat.ByteString where
+module PtrPoker.Compat.ByteString ( poke ) where
+
+import qualified GHC.ForeignPtr
+import qualified Foreign.ForeignPtr
+
+import Data.ByteString.Internal
+import PtrPoker.Prelude hiding ( poke )
+
+{- | 'unsafeWithForeignPtr' compatibility wrapper.
+
+GHC 9.0 made 'withForeignPtr' sound at the cost of performance. If you want to
+use the faster unsafe implementation, it's now at 'unsafeWithForeignPtr', and
+GHC asks you to promise that your continuation does not diverge. All we do here
+is @memcpy@ bytestrings, so we gladly pinky swear. For more detail, see Ben
+Gamari's post:
+<https://www.haskell.org/ghc/blog/20210607-the-keepAlive-story.html>
+
+Note that fumieval's mason uses 'unsafeWithForeignPtr' in the same way also to
+copy bytestrings.
+
+-}
+{-# INLINE compatUnsafeWithForeignPtr #-}
+compatUnsafeWithForeignPtr :: ForeignPtr a -> (Ptr a -> IO b) -> IO b
+#if MIN_VERSION_base(4,15,0)
+compatUnsafeWithForeignPtr =
+    GHC.ForeignPtr.unsafeWithForeignPtr
+#else
+compatUnsafeWithForeignPtr =
+    -- same implementation as new @unsafeWithForeignPtr@ (it was always unsafe)
+    Foreign.ForeignPtr.withForeignPtr
+#endif
+
+{-# INLINE poke #-}
+poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
 
 #if MIN_VERSION_bytestring(0,11,0)
-import Data.ByteString.Internal
-import PtrPoker.Prelude
 
-{-# INLINE poke #-}
-poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
 poke (BS fptr length) ptr =
   {-# SCC "poke" #-}
-  withForeignPtr fptr $ \ bytesPtr ->
+  compatUnsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr bytesPtr length $>
     plusPtr ptr length
-#else
-import Data.ByteString.Internal
-import PtrPoker.Prelude
 
-{-# INLINE poke #-}
-poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
+#else
+
 poke (PS fptr offset length) ptr =
   {-# SCC "poke" #-}
-  withForeignPtr fptr $ \ bytesPtr ->
+  compatUnsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr (plusPtr bytesPtr offset) length $>
     plusPtr ptr length
+
 #endif
