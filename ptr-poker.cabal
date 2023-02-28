@@ -68,6 +68,7 @@ library
   other-modules:
     PtrPoker.ByteString
     PtrPoker.Compat.ByteString
+    PtrPoker.Compat.ForeignPtr
     PtrPoker.Compat.Text
     PtrPoker.Ffi
     PtrPoker.IO.Prim

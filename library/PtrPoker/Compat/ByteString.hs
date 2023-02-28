@@ -3,31 +3,8 @@
 module PtrPoker.Compat.ByteString (poke) where
 
 import Data.ByteString.Internal
-import qualified Foreign.ForeignPtr
-import qualified GHC.ForeignPtr
+import qualified PtrPoker.Compat.ForeignPtr as Compat
 import PtrPoker.Prelude hiding (poke)
-
--- | 'unsafeWithForeignPtr' compatibility wrapper.
---
--- GHC 9.0 made 'withForeignPtr' sound at the cost of performance. If you want to
--- use the faster unsafe implementation, it's now at 'unsafeWithForeignPtr', and
--- GHC asks you to promise that your continuation does not diverge. All we do here
--- is @memcpy@ bytestrings, so we gladly pinky swear. For more detail, see Ben
--- Gamari's post:
--- <https://www.haskell.org/ghc/blog/20210607-the-keepAlive-story.html>
---
--- Note that fumieval's mason uses 'unsafeWithForeignPtr' in the same way also to
--- copy bytestrings.
-{-# INLINE compatUnsafeWithForeignPtr #-}
-compatUnsafeWithForeignPtr :: ForeignPtr a -> (Ptr a -> IO b) -> IO b
-#if MIN_VERSION_base(4,15,0)
-compatUnsafeWithForeignPtr =
-    GHC.ForeignPtr.unsafeWithForeignPtr
-#else
-compatUnsafeWithForeignPtr =
-    -- same implementation as new @unsafeWithForeignPtr@ (it was always unsafe)
-    Foreign.ForeignPtr.withForeignPtr
-#endif
 
 {-# INLINE poke #-}
 poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
@@ -36,7 +13,7 @@ poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
 
 poke (BS fptr length) ptr =
   {-# SCC "poke" #-}
-  compatUnsafeWithForeignPtr fptr $ \ bytesPtr ->
+  Compat.unsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr bytesPtr length $>
     plusPtr ptr length
 
@@ -44,7 +21,7 @@ poke (BS fptr length) ptr =
 
 poke (PS fptr offset length) ptr =
   {-# SCC "poke" #-}
-  compatUnsafeWithForeignPtr fptr $ \ bytesPtr ->
+  Compat.unsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr (plusPtr bytesPtr offset) length $>
     plusPtr ptr length
 
