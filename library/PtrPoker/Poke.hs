@@ -40,7 +40,7 @@ instance IsString Poke where
 -- |
 -- Concatenate a foldable of pokes.
 {-# INLINE [1] concat #-}
-concat :: Foldable f => f Poke -> Poke
+concat :: (Foldable f) => f Poke -> Poke
 concat pokers =
   Poke (\p -> foldM (\p (Poke io) -> io p) p pokers)
 

@@ -50,7 +50,7 @@ instance IsString Write where
 -- |
 -- Concatenate a foldable of writes.
 {-# INLINE concat #-}
-concat :: Foldable f => f Write -> Write
+concat :: (Foldable f) => f Write -> Write
 concat f =
   Write
     (foldl' (\a b -> a + writeSize b) 0 f)

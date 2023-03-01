@@ -5,7 +5,7 @@ module PtrPoker.IO.Prim where
 import PtrPoker.Prelude
 
 {-# INLINE pokeStorable #-}
-pokeStorable :: Storable a => Ptr Word8 -> a -> IO ()
+pokeStorable :: (Storable a) => Ptr Word8 -> a -> IO ()
 pokeStorable ptr value =
   {-# SCC "pokeStorable" #-}
   poke (castPtr ptr) value
