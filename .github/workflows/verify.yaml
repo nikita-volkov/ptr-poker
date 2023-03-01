@@ -1,9 +1,12 @@
+name: Compile, test and check the docs
+
 on:
   push:
     branches:
       - master
       - dev
-  pull_request: {}
+  pull_request:
+  workflow_call:
 
 jobs:
 
@@ -11,10 +14,10 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: mrkkrp/ormolu-action@v4
+      - uses: actions/checkout@v3
+      - uses: mrkkrp/ormolu-action@v10
 
-  build:
+  build-and-test:
 
     strategy:
       fail-fast: false
@@ -39,15 +42,17 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: 3.8
-      
-      - run: |
+
+      - name: Generate cabal.project
+        run: |
           echo "packages: ." >> cabal.project
           echo "constraints:" >> cabal.project
           echo "  , text == ${{ matrix.text }}" >> cabal.project
           echo "  , bytestring == ${{ matrix.bytestring }}" >> cabal.project
           cat cabal.project
-      - run: cabal update
-      - run: cabal freeze --enable-tests --enable-benchmarks
+
+      - name: Generate cabal.project.freeze
+        run: cabal freeze --enable-tests --enable-benchmarks
 
       - uses: actions/cache@v3
         with:
@@ -57,8 +62,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.ghc }}-
 
-      - run: cabal build --enable-tests --enable-benchmarks -j +RTS -A128m -n2m -N -RTS --ghc-options="${{ matrix.ghc-options }}"
-      - run: cabal test --test-show-details always
-      - run: cabal clean && cabal bench
-      - run: cabal haddock
+      - name: Install deps and compile
+        run: cabal build --enable-tests --enable-benchmarks -j +RTS -A128m -n2m -N -RTS --ghc-options="${{ matrix.ghc-options }}"
 
+      - name: Test
+        run: cabal test --test-show-details always
+
+      - name: Benchmark
+        run: |
+          cabal clean
+          cabal bench -O2
+
+      - name: Run Haddock
+        run: cabal haddock

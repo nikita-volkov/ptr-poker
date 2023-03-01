@@ -1,0 +1,68 @@
+name: Release the lib to Hackage
+
+on:
+  push:
+    branches:
+      - major
+      - minor
+      - patch
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+
+  verify:
+    uses: ./.github/workflows/verify.yaml
+    secrets: inherit
+
+  release:
+    needs:
+      - verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Bump package version
+        uses: nikita-volkov/edit-cabal-version.github-action@v1.1.1
+        with:
+          mode: bump
+          bump-place: ${{ fromJSON('{"major":1,"minor":2,"patch":3}')[github.ref_name] }}
+        id: bump-cabal-version
+
+      - name: Ensure no according tag exists
+        uses: nikita-volkov/fail-if-tag-exists.github-action@v1.0.0
+        with:
+          tag: ${{ steps.bump-cabal-version.outputs.after }}
+
+      - name: Commit the version update
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Set package version to ${{ steps.bump-cabal-version.outputs.after }}
+          file_pattern: |
+            *.cabal
+        id: commit
+
+      - name: Merge to master
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          from_branch: ${{ github.ref_name }}
+          target_branch: master
+          github_token: ${{ github.token }}
+          message: Set package version to ${{ steps.bump-cabal-version.outputs.after }}
+
+      - name: Publish on Hackage
+        uses: nikita-volkov/hackage-publish.github-action@v2.0.0
+        with:
+          token: ${{ secrets.HACKAGE_AUTH_TOKEN }}
+          publish: true
+
+      - name: Tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.bump-cabal-version.outputs.after }}
+          tag_prefix:
+          commit_sha: ${{ steps.commit.outputs.commit_hash }}
