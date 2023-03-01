@@ -54,7 +54,7 @@ jobs:
           message: Set package version to ${{ steps.bump-cabal-version.outputs.after }}
 
       - name: Publish on Hackage
-        uses: nikita-volkov/hackage-publish.github-action@v2.0.0
+        uses: nikita-volkov/publish-to-hackage.github-action@v2.0.0
         with:
           token: ${{ secrets.HACKAGE_AUTH_TOKEN }}
           publish: true
