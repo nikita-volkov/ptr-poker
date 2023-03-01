@@ -3,7 +3,7 @@
 module PtrPoker.Compat.ByteString (poke) where
 
 import Data.ByteString.Internal
-import qualified PtrPoker.Compat.ForeignPtr as Compat
+import qualified PtrPoker.Compat.ForeignPtr as ForeignPtr
 import PtrPoker.Prelude hiding (poke)
 
 {-# INLINE poke #-}
@@ -13,7 +13,7 @@ poke :: ByteString -> Ptr Word8 -> IO (Ptr Word8)
 
 poke (BS fptr length) ptr =
   {-# SCC "poke" #-}
-  Compat.unsafeWithForeignPtr fptr $ \ bytesPtr ->
+  ForeignPtr.unsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr bytesPtr length $>
     plusPtr ptr length
 
@@ -21,7 +21,7 @@ poke (BS fptr length) ptr =
 
 poke (PS fptr offset length) ptr =
   {-# SCC "poke" #-}
-  Compat.unsafeWithForeignPtr fptr $ \ bytesPtr ->
+  ForeignPtr.unsafeWithForeignPtr fptr $ \ bytesPtr ->
     memcpy ptr (plusPtr bytesPtr offset) length $>
     plusPtr ptr length
 
