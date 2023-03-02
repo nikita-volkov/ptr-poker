@@ -44,6 +44,12 @@ jobs:
             *.cabal
         id: commit
 
+      - name: Publish on Hackage
+        uses: nikita-volkov/publish-to-hackage.github-action@v2.0.0
+        with:
+          token: ${{ secrets.HACKAGE_AUTH_TOKEN }}
+          publish: true
+
       - name: Merge to master
         uses: devmasx/merge-branch@1.4.0
         with:
@@ -52,12 +58,6 @@ jobs:
           target_branch: master
           github_token: ${{ github.token }}
           message: Set package version to ${{ steps.bump-cabal-version.outputs.after }}
-
-      - name: Publish on Hackage
-        uses: nikita-volkov/publish-to-hackage.github-action@v2.0.0
-        with:
-          token: ${{ secrets.HACKAGE_AUTH_TOKEN }}
-          publish: true
 
       - name: Tag
         uses: mathieudutour/github-tag-action@v6.1
