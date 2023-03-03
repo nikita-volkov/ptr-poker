@@ -50,6 +50,14 @@ jobs:
           token: ${{ secrets.HACKAGE_AUTH_TOKEN }}
           publish: true
 
+      - name: Tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.bump-cabal-version.outputs.after }}
+          tag_prefix:
+          commit_sha: ${{ steps.commit.outputs.commit_hash }}
+
       - name: Merge to master
         uses: devmasx/merge-branch@1.4.0
         with:
@@ -58,11 +66,3 @@ jobs:
           target_branch: master
           github_token: ${{ github.token }}
           message: Set package version to ${{ steps.bump-cabal-version.outputs.after }}
-
-      - name: Tag
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ steps.bump-cabal-version.outputs.after }}
-          tag_prefix:
-          commit_sha: ${{ steps.commit.outputs.commit_hash }}
