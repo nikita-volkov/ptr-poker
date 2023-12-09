@@ -1,7 +1,11 @@
 cabal-version: 3.0
 name:          ptr-poker
-version:       0.1.2.13
+version:       0.1.2.14
 synopsis:      Pointer poking action construction and composition toolkit
+description:
+  Abstraction over memory writes. Efficiently building strict bytestrings is one usecase for it.
+
+category:      Data, Memory, Ptr
 homepage:      https://github.com/nikita-volkov/ptr-poker
 bug-reports:   https://github.com/nikita-volkov/ptr-poker/issues
 author:        Nikita Volkov <nikita.y.volkov@mail.ru>
@@ -82,7 +86,7 @@ library
 
   build-depends:
     , base >=4.11 && <5
-    , bytestring >=0.10 && <0.12
+    , bytestring >=0.10 && <0.13
     , scientific >=0.3.6.2 && <0.4
     , text >=1 && <3
 

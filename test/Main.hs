@@ -65,8 +65,9 @@ prop_realZeroNonRealDoubleAsciiDec =
     read string === a
 
 prop_nonRealZeroNonRealDoubleAsciiDec =
-  withTests 99 $
-    property $ do
+  withTests 99
+    $ property
+    $ do
       a <- forAll nonRealRealFloatGen
       let string =
             Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
