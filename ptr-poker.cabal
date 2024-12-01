@@ -1,6 +1,6 @@
 cabal-version: 3.0
 name: ptr-poker
-version: 0.1.2.14
+version: 0.1.2.15
 synopsis: Pointer poking action construction and composition toolkit
 description:
   Abstraction over memory writes. Efficiently building strict bytestrings is one usecase for it.
