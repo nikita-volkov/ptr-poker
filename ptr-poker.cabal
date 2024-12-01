@@ -1,28 +1,26 @@
 cabal-version: 3.0
-name:          ptr-poker
-version:       0.1.2.14
-synopsis:      Pointer poking action construction and composition toolkit
+name: ptr-poker
+version: 0.1.2.14
+synopsis: Pointer poking action construction and composition toolkit
 description:
   Abstraction over memory writes. Efficiently building strict bytestrings is one usecase for it.
 
-category:      Data, Memory, Ptr
-homepage:      https://github.com/nikita-volkov/ptr-poker
-bug-reports:   https://github.com/nikita-volkov/ptr-poker/issues
-author:        Nikita Volkov <nikita.y.volkov@mail.ru>
-maintainer:    Nikita Volkov <nikita.y.volkov@mail.ru>
-copyright:     (c) 2020 Nikita Volkov
-license:       MIT
-license-file:  LICENSE
+category: Data, Memory, Ptr
+homepage: https://github.com/nikita-volkov/ptr-poker
+bug-reports: https://github.com/nikita-volkov/ptr-poker/issues
+author: Nikita Volkov <nikita.y.volkov@mail.ru>
+maintainer: Nikita Volkov <nikita.y.volkov@mail.ru>
+copyright: (c) 2020 Nikita Volkov
+license: MIT
+license-file: LICENSE
 
 source-repository head
-  type:     git
+  type: git
   location: git://github.com/nikita-volkov/ptr-poker.git
 
 common base-settings
-  default-language:   Haskell2010
+  default-language: Haskell2010
   default-extensions:
-    NoImplicitPrelude
-    NoMonomorphismRestriction
     BangPatterns
     ConstraintKinds
     DataKinds
@@ -44,6 +42,8 @@ common base-settings
     MagicHash
     MultiParamTypeClasses
     MultiWayIf
+    NoImplicitPrelude
+    NoMonomorphismRestriction
     OverloadedStrings
     ParallelListComp
     PatternGuards
@@ -62,8 +62,8 @@ common base-settings
     ViewPatterns
 
 library
-  import:          base-settings
-  hs-source-dirs:  library
+  import: base-settings
+  hs-source-dirs: library
   exposed-modules:
     PtrPoker.Poke
     PtrPoker.Size
@@ -85,30 +85,34 @@ library
     cbits/text.c
 
   build-depends:
-    , base >=4.11 && <5
-    , bytestring >=0.10 && <0.13
-    , scientific >=0.3.6.2 && <0.4
-    , text >=1 && <3
+    base >=4.11 && <5,
+    bytestring >=0.10 && <0.13,
+    scientific >=0.3.6.2 && <0.4,
+    text >=1 && <3,
 
 test-suite test
-  import:         base-settings
-  type:           exitcode-stdio-1.0
+  import: base-settings
+  type: exitcode-stdio-1.0
   hs-source-dirs: test
-  main-is:        Main.hs
+  main-is: Main.hs
   build-depends:
-    , hedgehog >=1.2 && <2
-    , isomorphism-class >=0.1.0.8 && <0.2
-    , numeric-limits >=0.1 && <0.2
-    , ptr-poker
-    , rerebase >=1.16.1 && <2
+    hedgehog >=1.2 && <2,
+    isomorphism-class >=0.1.0.8 && <0.2,
+    numeric-limits >=0.1 && <0.2,
+    ptr-poker,
+    rerebase >=1.16.1 && <2,
 
 benchmark bench
-  import:         base-settings
-  type:           exitcode-stdio-1.0
+  import: base-settings
+  type: exitcode-stdio-1.0
   hs-source-dirs: bench
-  main-is:        Main.hs
-  ghc-options:    -O2 -threaded -with-rtsopts=-N
+  main-is: Main.hs
+  ghc-options:
+    -O2
+    -threaded
+    -with-rtsopts=-N
+
   build-depends:
-    , criterion >=1.6 && <2
-    , ptr-poker
-    , rerebase >=1.16.1 && <2
+    criterion >=1.6 && <2,
+    ptr-poker,
+    rerebase >=1.16.1 && <2,
