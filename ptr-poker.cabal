@@ -1,6 +1,6 @@
 cabal-version: 3.0
 name: ptr-poker
-version: 0.1.2.15
+version: 0.1.2.16
 synopsis: Pointer poking action construction and composition toolkit
 description:
   Abstraction over memory writes. Efficiently building strict bytestrings is one usecase for it.
@@ -97,7 +97,7 @@ test-suite test
   main-is: Main.hs
   build-depends:
     hedgehog >=1.2 && <2,
-    isomorphism-class >=0.2.1.1 && <0.3,
+    isomorphism-class >=0.1 && <0.4,
     numeric-limits >=0.1 && <0.2,
     ptr-poker,
     rerebase >=1.16.1 && <2,
