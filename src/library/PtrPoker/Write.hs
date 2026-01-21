@@ -48,6 +48,13 @@ instance IsString Write where
     byteString . fromString
 
 -- |
+-- Force the evaluation of a write. Useful when a complex write is reused
+-- multiple times to avoid recomputing its structure.
+{-# INLINE force #-}
+force :: Write -> Write
+force = byteString . toByteString
+
+-- |
 -- Concatenate a foldable of writes.
 {-# INLINE concat #-}
 concat :: (Foldable f) => f Write -> Write
