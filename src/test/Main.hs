@@ -38,19 +38,19 @@ main = hspec $ do
   describe "Write - ASCII decimal" $ do
     it "wordAsciiDec produces parseable output" $ hedgehog $ do
       a <- forAll (Gen.word (Range.exponential minBound maxBound))
-      let string = Char8ByteString.unpack (Write.writeToByteString (Write.wordAsciiDec a))
+      let string = Char8ByteString.unpack (Write.toByteString (Write.wordAsciiDec a))
       annotate string
       read string === a
 
     it "intAsciiDec produces parseable output" $ hedgehog $ do
       a <- forAll (Gen.int (Range.exponential minBound maxBound))
-      let string = Char8ByteString.unpack (Write.writeToByteString (Write.intAsciiDec a))
+      let string = Char8ByteString.unpack (Write.toByteString (Write.intAsciiDec a))
       annotate string
       read string === a
 
     it "doubleAsciiDec produces parseable output" $ hedgehog $ do
       a <- forAll realFloatGen
-      let string = Char8ByteString.unpack (Write.writeToByteString (Write.doubleAsciiDec a))
+      let string = Char8ByteString.unpack (Write.toByteString (Write.doubleAsciiDec a))
       annotate string
       if isNaN a
         then string === "NaN"
@@ -58,7 +58,7 @@ main = hspec $ do
 
     it "zeroNonRealDoubleAsciiDec with real numbers" $ hedgehog $ do
       a <- forAll realRealFloatGen
-      let string = Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
+      let string = Char8ByteString.unpack (Write.toByteString (Write.zeroNonRealDoubleAsciiDec a))
       annotate string
       read string === a
 
@@ -67,72 +67,72 @@ main = hspec $ do
       $ hedgehog
       $ do
         a <- forAll nonRealRealFloatGen
-        let string = Char8ByteString.unpack (Write.writeToByteString (Write.zeroNonRealDoubleAsciiDec a))
+        let string = Char8ByteString.unpack (Write.toByteString (Write.zeroNonRealDoubleAsciiDec a))
         annotate string
         read @Integer string === 0
 
   describe "Write - Text" $ do
     it "textUtf8 ASCII matches encoded text" $ hedgehog $ do
       a <- forAll (Gen.text (Range.exponential 0 9999) Gen.ascii)
-      Write.writeToByteString (Write.textUtf8 a) === Text.encodeUtf8 a
+      Write.toByteString (Write.textUtf8 a) === Text.encodeUtf8 a
 
     it "textUtf8 Unicode matches encoded text" $ hedgehog $ do
       a <- forAll (Gen.text (Range.exponential 0 9999) (Gen.choice [Gen.ascii, Gen.unicode]))
-      Write.writeToByteString (Write.textUtf8 a) === Text.encodeUtf8 a
+      Write.toByteString (Write.textUtf8 a) === Text.encodeUtf8 a
 
   describe "Write - Word operations" $ do
     it "word8 matches ByteString.Builder" $ hedgehog $ do
       a <- forAll (Gen.word8 Range.constantBounded)
-      Write.writeToByteString (Write.word8 a) === to (ByteStringBuilder.word8 a)
+      Write.toByteString (Write.word8 a) === to (ByteStringBuilder.word8 a)
 
     it "lWord16 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.word16 Range.constantBounded)
-      Write.writeToByteString (Write.lWord16 a) === to (ByteStringBuilder.word16LE a)
+      Write.toByteString (Write.lWord16 a) === to (ByteStringBuilder.word16LE a)
 
     it "bWord16 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.word16 Range.constantBounded)
-      Write.writeToByteString (Write.bWord16 a) === to (ByteStringBuilder.word16BE a)
+      Write.toByteString (Write.bWord16 a) === to (ByteStringBuilder.word16BE a)
 
     it "lWord32 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.word32 Range.constantBounded)
-      Write.writeToByteString (Write.lWord32 a) === to (ByteStringBuilder.word32LE a)
+      Write.toByteString (Write.lWord32 a) === to (ByteStringBuilder.word32LE a)
 
     it "bWord32 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.word32 Range.constantBounded)
-      Write.writeToByteString (Write.bWord32 a) === to (ByteStringBuilder.word32BE a)
+      Write.toByteString (Write.bWord32 a) === to (ByteStringBuilder.word32BE a)
 
     it "lWord64 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.word64 Range.constantBounded)
-      Write.writeToByteString (Write.lWord64 a) === to (ByteStringBuilder.word64LE a)
+      Write.toByteString (Write.lWord64 a) === to (ByteStringBuilder.word64LE a)
 
     it "bWord64 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.word64 Range.constantBounded)
-      Write.writeToByteString (Write.bWord64 a) === to (ByteStringBuilder.word64BE a)
+      Write.toByteString (Write.bWord64 a) === to (ByteStringBuilder.word64BE a)
 
   describe "Write - Int operations" $ do
     it "lInt16 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.int16 Range.constantBounded)
-      Write.writeToByteString (Write.lInt16 a) === to (ByteStringBuilder.int16LE a)
+      Write.toByteString (Write.lInt16 a) === to (ByteStringBuilder.int16LE a)
 
     it "bInt16 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.int16 Range.constantBounded)
-      Write.writeToByteString (Write.bInt16 a) === to (ByteStringBuilder.int16BE a)
+      Write.toByteString (Write.bInt16 a) === to (ByteStringBuilder.int16BE a)
 
     it "lInt32 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.int32 Range.constantBounded)
-      Write.writeToByteString (Write.lInt32 a) === to (ByteStringBuilder.int32LE a)
+      Write.toByteString (Write.lInt32 a) === to (ByteStringBuilder.int32LE a)
 
     it "bInt32 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.int32 Range.constantBounded)
-      Write.writeToByteString (Write.bInt32 a) === to (ByteStringBuilder.int32BE a)
+      Write.toByteString (Write.bInt32 a) === to (ByteStringBuilder.int32BE a)
 
     it "lInt64 matches ByteString.Builder LE" $ hedgehog $ do
       a <- forAll (Gen.int64 Range.constantBounded)
-      Write.writeToByteString (Write.lInt64 a) === to (ByteStringBuilder.int64LE a)
+      Write.toByteString (Write.lInt64 a) === to (ByteStringBuilder.int64LE a)
 
     it "bInt64 matches ByteString.Builder BE" $ hedgehog $ do
       a <- forAll (Gen.int64 Range.constantBounded)
-      Write.writeToByteString (Write.bInt64 a) === to (ByteStringBuilder.int64BE a)
+      Write.toByteString (Write.bInt64 a) === to (ByteStringBuilder.int64BE a)
 
 realFloatGen :: (MonadGen m, RealFloat a, Read a) => m a
 realFloatGen =

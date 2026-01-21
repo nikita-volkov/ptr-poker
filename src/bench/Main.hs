@@ -13,7 +13,7 @@ main =
         [ bench "4"
             $ nf
               ( \(a, b, c, d) ->
-                  Write.writeToByteString
+                  Write.toByteString
                     $ Write.bWord32 a
                     <> Write.bWord32 b
                     <> Write.bWord32 c
@@ -42,15 +42,15 @@ main =
                   "ptr-poker"
                   [ bgroup
                       "latin"
-                      [ bench "1" (nf (Write.writeToByteString . Write.textUtf8) latinSample1),
-                        bench "10" (nf (Write.writeToByteString . Write.textUtf8) latinSample10),
-                        bench "100" (nf (Write.writeToByteString . Write.textUtf8) latinSample100)
+                      [ bench "1" (nf (Write.toByteString . Write.textUtf8) latinSample1),
+                        bench "10" (nf (Write.toByteString . Write.textUtf8) latinSample10),
+                        bench "100" (nf (Write.toByteString . Write.textUtf8) latinSample100)
                       ],
                     bgroup
                       "greek"
-                      [ bench "1" (nf (Write.writeToByteString . Write.textUtf8) greekSample1),
-                        bench "10" (nf (Write.writeToByteString . Write.textUtf8) greekSample10),
-                        bench "100" (nf (Write.writeToByteString . Write.textUtf8) greekSample100)
+                      [ bench "1" (nf (Write.toByteString . Write.textUtf8) greekSample1),
+                        bench "10" (nf (Write.toByteString . Write.textUtf8) greekSample10),
+                        bench "100" (nf (Write.toByteString . Write.textUtf8) greekSample100)
                       ]
                   ],
                 bgroup

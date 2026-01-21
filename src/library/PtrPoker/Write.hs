@@ -10,10 +10,17 @@ import qualified PtrPoker.Size as Size
 
 -- |
 -- Execute Write, producing strict ByteString.
-{-# INLINEABLE writeToByteString #-}
-writeToByteString :: Write -> ByteString
-writeToByteString Write {..} =
+{-# INLINEABLE toByteString #-}
+toByteString :: Write -> ByteString
+toByteString Write {..} =
   ByteString.unsafeCreate writeSize (void . Poke.pokePtr writePoke)
+
+-- |
+-- Execute Write, producing strict ByteString.
+{-# DEPRECATED writeToByteString "Use 'toByteString' instead" #-}
+{-# INLINE writeToByteString #-}
+writeToByteString :: Write -> ByteString
+writeToByteString = toByteString
 
 -- |
 -- Specification of how many bytes to allocate and how to populate them.
@@ -252,7 +259,7 @@ byteString a =
 -- compared to @('byteString' . 'Data.Text.Encoding.encodeUtf8')@.
 --
 -- Following are the benchmark results comparing the performance of
--- @('writeToByteString' . 'textUtf8')@ with
+-- @('toByteString' . 'textUtf8')@ with
 -- @Data.Text.Encoding.'Data.Text.Encoding.encodeUtf8'@
 -- on inputs in Latin and Greek (requiring different number of surrogate bytes).
 -- The results show that they are quite similar.
