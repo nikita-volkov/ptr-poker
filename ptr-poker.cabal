@@ -63,7 +63,7 @@ common base-settings
 
 library
   import: base-settings
-  hs-source-dirs: library
+  hs-source-dirs: src/library
   exposed-modules:
     PtrPoker.Poke
     PtrPoker.Size
@@ -79,10 +79,10 @@ library
     PtrPoker.Prelude
 
   c-sources:
-    cbits/dtoa.c
-    cbits/int_encoding.c
-    cbits/itoa.c
-    cbits/text.c
+    src/cbits/dtoa.c
+    src/cbits/int_encoding.c
+    src/cbits/itoa.c
+    src/cbits/text.c
 
   build-depends:
     base >=4.11 && <5,
@@ -93,7 +93,7 @@ library
 test-suite test
   import: base-settings
   type: exitcode-stdio-1.0
-  hs-source-dirs: test
+  hs-source-dirs: src/test
   main-is: Main.hs
   build-depends:
     hedgehog >=1.2 && <2,
@@ -107,7 +107,7 @@ test-suite test
 benchmark bench
   import: base-settings
   type: exitcode-stdio-1.0
-  hs-source-dirs: bench
+  hs-source-dirs: src/bench
   main-is: Main.hs
   ghc-options:
     -O2

@@ -16,10 +16,7 @@
 
 # Unignore subtrees:
 !/.github/
-!/bench/
-!/cbits/
-!/library/
-!/test/
+!/src/
 
 # Ignore noise:
 .DS_Store
