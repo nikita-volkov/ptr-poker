@@ -1,0 +1,31 @@
+name: Release the lib to Hackage
+
+on:
+  push:
+    branches:
+      - supermajor
+      - major
+      - minor
+      - patch
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+    secrets: inherit
+
+  generate-docs:
+    uses: nikita-volkov/haskell-hackage-lib-github-actions-workflows/.github/workflows/generate-docs.yaml@v4
+    secrets: inherit
+
+  release:
+    needs:
+      - build
+      - generate-docs
+    uses: nikita-volkov/haskell-hackage-lib-github-actions-workflows/.github/workflows/release.yaml@v4
+    secrets: inherit
+    with:
+      prefix-tag-with-v: true
