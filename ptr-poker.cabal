@@ -95,10 +95,16 @@ test-suite test
   type: exitcode-stdio-1.0
   hs-source-dirs: src/test
   main-is: Main.hs
+  other-modules:
+    SizeSpec
+    WriteSpec
+
+  build-tool-depends:
+    hspec-discover:hspec-discover >=2.7 && <3
+
   build-depends:
-    hedgehog >=1.2 && <2,
-    hspec >=2.10 && <3,
-    hspec-hedgehog >=0.1 && <0.2,
+    QuickCheck >=2.14 && <3,
+    hspec >=2.7 && <3,
     isomorphism-class >=0.1 && <0.4,
     numeric-limits >=0.1 && <0.2,
     ptr-poker,
