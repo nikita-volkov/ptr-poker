@@ -16,7 +16,7 @@ license-file: LICENSE
 
 source-repository head
   type: git
-  location: git://github.com/nikita-volkov/ptr-poker.git
+  location: https://github.com/nikita-volkov/ptr-poker
 
 common base-settings
   default-language: Haskell2010
