@@ -97,6 +97,8 @@ test-suite test
   main-is: Main.hs
   build-depends:
     hedgehog >=1.2 && <2,
+    hspec >=2.10 && <3,
+    hspec-hedgehog >=0.1 && <0.2,
     isomorphism-class >=0.1 && <0.4,
     numeric-limits >=0.1 && <0.2,
     ptr-poker,
